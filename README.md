@@ -1,6 +1,9 @@
 # 🎼 Full Score - Web's Native Performance
 
 <br />
+![rocco-dipoppa-_uDj_lyPVpA-unsplash](https://github.com/user-attachments/assets/cc84dac0-5f6b-4c20-afa1-6d5a32f9508c)
+Photo by Rocco Dipoppa on Unsplash
+<br />
 
 ## Preface: When Will the Next Web Technology Appear?
 
@@ -769,6 +772,11 @@ The most beautiful moment in a singer-songwriter's performance is when the audie
 Every time users click and scroll, BEAT records it. This is music the singer-songwriter cannot make alone. Like how audience response, applause, and singing together complete a real live performance, user interactions complete Full Score.
 
 Now every browser serves like an auxiliary database containing its own music. With each person's rhythm, each person's tempo, each person's story performed.
+
+<br />
+![andriy-vitaly-fIIkD4JBJr0-unsplash](https://github.com/user-attachments/assets/af0e290d-6e47-45cf-ba4c-3672bb159b2a)
+Photo by Andriy Vitaly on Unsplash
+<br />
 
 ### The Singer-Songwriter's Final Realization
 
