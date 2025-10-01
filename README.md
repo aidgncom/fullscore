@@ -1,8 +1,7 @@
 # 🎼 Full Score - Web's Native Performance
 
 <br />
-![rocco-dipoppa-_uDj_lyPVpA-unsplash](https://github.com/user-attachments/assets/cc84dac0-5f6b-4c20-afa1-6d5a32f9508c)
-Photo by Rocco Dipoppa on Unsplash
+![Photo by Rocco Dipoppa on Unsplash](https://github.com/user-attachments/assets/cc84dac0-5f6b-4c20-afa1-6d5a32f9508c)
 <br />
 
 ## Preface: When Will the Next Web Technology Appear?
@@ -774,8 +773,7 @@ Every time users click and scroll, BEAT records it. This is music the singer-son
 Now every browser serves like an auxiliary database containing its own music. With each person's rhythm, each person's tempo, each person's story performed.
 
 <br />
-![andriy-vitaly-fIIkD4JBJr0-unsplash](https://github.com/user-attachments/assets/af0e290d-6e47-45cf-ba4c-3672bb159b2a)
-Photo by Andriy Vitaly on Unsplash
+![Photo by Andriy Vitaly on Unsplash](https://github.com/user-attachments/assets/af0e290d-6e47-45cf-ba4c-3672bb159b2a)
 <br />
 
 ### The Singer-Songwriter's Final Realization
