@@ -12,7 +12,15 @@ Web technology today faces a paradox. Tools get heavier while insights diminish.
 
 Web technology has been a history of addition. More features, more data, more layers of saturation. The result? We load megabytes of analytics and security scripts, manage dozens of servers, and battle endlessly expanding complexity.
 
-Full Score chose a different path. With less than 9 KB (~3 KB gzipped) of code, this document demonstrates how to implement real-time security layers, AI-ready analytics, and adaptive personalization based on user behavioral patterns, all while achieving decentralization, 90% cost reduction, and GDPR-conscious architecture.
+Full Score chose a different path. With less than 9 KB (~3 KB gzipped) of code, this document demonstrates how to implement.
+
+- **Serverless Analytics** with Cross-tab Tracking & Offline Resilience
+- **BOT Security & Human Personalization** via Real-time Behavioral Layer
+- **Human & AI Readable Format** as Linear String, No Parsing
+- **90% Cost Reduction** compared to traditional solutions
+- **GDPR-conscious Architecture** with no personal data storage
+
+All while achieving a decentralized paradigm using browsers as auxiliary databases.
 
 I've tried to keep the technical explanations from being too dry, but if you find yourself losing steam, feel free to skip to the Fifth Movement to see how everything comes together.
 
