@@ -14,10 +14,10 @@ Web technology has been a history of addition. More features, more data, more la
 
 Full Score chose a different path. With less than 9 KB (~3 KB gzipped) of code, this document demonstrates how to implement.
 
-- **Serverless Analytics** with Cross-tab Tracking & Offline Resilience
+- **Serverless Analytics** with No Endpoints & 90% Cost Reduction
+- **Complete Cross-tab User Journey** Without Session Replay
 - **BOT Security & Human Personalization** via Real-time Behavioral Layer
 - **Human & AI Readable Format** as Linear String, No Parsing
-- **90% Cost Reduction** compared to traditional solutions
 - **GDPR-conscious Architecture** with no personal data storage
 
 All while achieving a decentralized paradigm using browsers as auxiliary databases.
