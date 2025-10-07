@@ -23,7 +23,7 @@ Full Score chose a different path. With less than 9 KB (~3 KB gzipped) of code, 
 All while achieving a decentralized paradigm using browsers as auxiliary databases.
 
 ```
-Traditional Analytics: Browser → API → Raw Database → Queue(Kafka) → Processing(Spark) →  Processed Database → Archive
+Traditional Analytics: Browser → API → Raw Database → Queue(Kafka) → Processing(Spark) → Processed Database → Archive
 // ⛔ 7 Steps, $5,000+/month
 
 Full Score:  Browser(Decentralized Database) ~ Edge → Archive
