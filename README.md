@@ -12,7 +12,7 @@ Web technology today faces a paradox. Tools get heavier while insights diminish.
 
 Web technology has been a history of addition. More features, more data, more layers of saturation. The result? We load megabytes of analytics and security scripts, manage dozens of servers, and battle endlessly expanding complexity.
 
-Full Score chose a different path. With less than 8KB (3KB gzipped) of code, this document demonstrates how to implement.
+Full Score takes a different approach. Instead of piling on more features, it keeps only what matters with 3KB (min+gzip) of code that proposes a new direction for analytics.
 
 - **Serverless Analytics** with No Endpoints & 90% Cost Reduction
 - **Complete Cross-tab User Journey** Without Session Replay
