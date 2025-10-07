@@ -12,13 +12,13 @@ Web technology today faces a paradox. Tools get heavier while insights diminish.
 
 Web technology has been a history of addition. More features, more data, more layers of saturation. The result? We load megabytes of analytics and security scripts, manage dozens of servers, and battle endlessly expanding complexity.
 
-Full Score chose a different path. With less than 9 KB (~3 KB gzipped) of code, this document demonstrates how to implement.
+Full Score chose a different path. With less than 8KB (3KB gzipped) of code, this document demonstrates how to implement.
 
 - **Serverless Analytics** with No Endpoints & 90% Cost Reduction
 - **Complete Cross-tab User Journey** Without Session Replay
-- **BOT Security & Human Personalization** via Real-time Behavioral Layer
-- **Human & AI Readable Format** as Linear String, No Parsing
-- **GDPR-conscious Architecture** with no personal data storage
+- **Bot Detection & Human Personalization** via Real-time Behavioral Layer
+- **Human & AI-Readable Format** as Linear Strings, No Parsing
+- **GDPR-Conscious Architecture** with Zero Direct Identifiers
 
 All while achieving a decentralized paradigm using browsers as auxiliary databases.
 
@@ -851,7 +851,7 @@ Everything is contained within this small Full Score.
 
 ## Usage
 
-Full Score is an extremely lightweight tool under 9 KB. Simply place it directly in your website's footer, where it will have minimal impact on loading times. It's designed for easy customization. Please refer to the code comments for details.
+Full Score is an extremely lightweight library. Simply place it directly in your website's footer, where it will have minimal impact on loading times. It's designed for easy customization. Please refer to the code comments for details.
 
 While real-time analytics and security layers based on user behavior patterns can be implemented directly on the client side, deploying to Edge maximizes Full Score's capabilities with features like WAF blocking, personalized functionality, AI analysis, and log pushing to cloud storage.
 
