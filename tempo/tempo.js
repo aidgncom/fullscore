@@ -37,24 +37,26 @@ function tempo(rhythm) { // Tap Event Method Performance Optimizer
 			document.addEventListener("click", block, {capture: true}); // Register blocker
 			let el = document.elementFromPoint(e.changedTouches[0].clientX, e.changedTouches[0].clientY); // Get target at touch point
 			const label = el?.closest('label');
-			el = label?.control || label?.querySelector('input,textarea,select,button') || el; // Label to control redirect
-			rhythm && (el = rhythm.click(el)); // Mobile RHYTHM integration
+			el = label?.control || label?.querySelector('input,textarea,select,button') || el; // Get real target from label
+			while (el && el.namespaceURI === 'http://www.w3.org/2000/svg') el = el.parentElement; // Get real target from SVG
+			rhythm && rhythm.click(el); // Mobile RHYTHM integration
 			if (el) for (let i = 0; i < 8; i++) { // Find clickable parent, max 8 levels
 				if (typeof el.click === "function") {el.click(); break;} // Native click method
 				if (el.onclick) {el.dispatchEvent(new MouseEvent("click", {bubbles: true, cancelable: true})); break;} // Onclick handler
 				if (!(el = el.parentElement)) break; // Move to parent or exit
 			}
 		}, {capture: true, passive: true});
-	} else if (rhythm) { // Desktop environment detection
+	} else { // Desktop environment detection
 		let used = false; // Gesture already used
 		document.addEventListener("mousedown", () => used = false, {capture: true}); // Reset on mouse down
 		document.addEventListener("keydown", e => !e.repeat && (e.key === "Enter" || e.key === " ") && (used = false), {capture: true}); // Reset on Enter/Space
 		document.addEventListener("click", e => {
 			if (used) return; // Skip if already used
 			used = true;
-			const el = e.target.closest('label')?.control || e.target; // Process once, label to control redirect
-			rhythm.click(el); // desktop RHYTHM integration
+			let el = e.target.closest('label')?.control || e.target; // Get real target from label
+			while (el && el.namespaceURI === 'http://www.w3.org/2000/svg') el = el.parentElement; // Get real target from SVG
+			rhythm && rhythm.click(el); // desktop RHYTHM integration
 		}, {capture: true});
 	}
 }
-// tempo(); // Uncomment for standalone use
+tempo(); // Uncomment for standalone use
