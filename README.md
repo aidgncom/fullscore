@@ -851,7 +851,7 @@ Everything is contained within this small Full Score.
 
 ## Usage
 
-Full Score is an extremely lightweight library. Simply place it directly in your website's footer, where it will have minimal impact on loading times. It's designed for easy customization. Please refer to the code comments for details.
+Full Score is an extremely lightweight library with framework-level orchestration. Simply place it directly in your website's footer, where it will have minimal impact on loading times. It's designed for easy customization. Please refer to the code comments for details.
 
 While real-time analytics and security layers based on user behavior patterns can be implemented directly on the client side, deploying to Edge maximizes Full Score's capabilities with features like WAF blocking, personalized functionality, AI analysis, and log pushing to cloud storage.
 
