@@ -20,7 +20,7 @@ Full Score takes a different approach. Instead of piling on more features, it ke
 - **Human & AI-Readable Format** as Linear Strings, No Parsing
 - **GDPR-Conscious Architecture** with Zero Direct Identifiers
 
-All while achieving a decentralized paradigm using browsers as auxiliary databases.
+All while achieving a decentralized paradigm using browsers like auxiliary databases.
 
 ```
 Traditional Analytics: Browser → API → Raw Database → Queue(Kafka) → Processing(Spark) → Processed Database → Archive
@@ -797,7 +797,7 @@ Now every browser serves like an auxiliary database containing its own music. Wi
 
 <br />
 <br />
-<img width="1080" height="1920" alt="Photo by Andriy Vitaly on Unsplash" src="https://github.com/user-attachments/assets/8d56c456-28bf-4df4-aff2-193520989dcb" />
+<img width="1080" height="1920" alt="Photo by Andriy Vitaly on Unsplash" src="https://github.com/user-attachments/assets/3cd87f26-dc82-4fd3-ac60-b44489bda3a8" />
 <br />
 <br />
 
