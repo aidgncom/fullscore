@@ -335,7 +335,7 @@ A traditional concert hall would be different. Without complex broadcast equipme
 
 RHYTHM first-party cookies are set to the root path (/) but are also accessible from the (/rhythm) path. Leveraging this cookie characteristic, Edge resonates exclusively at the (/rhythm) path. If Edge had resonated with the root path (/), it would suffer from all manner of noise. But at the (/rhythm) path, it can enjoy RHYTHM's performance quietly and clearly.
 
-An alternative Full Score variant sets cookies directly at the (/rhythm) path. This version uses LocalStorage for cookie mirroring and orchestration, enabling immediate data updates. However, dual storage usage reduces management efficiency and browser support remains limited. Thus, the current Full Score model became the primary release.
+An alternative variant of Full Score uses LocalStorage instead of cookies. This approach offers immediate data updates and generous capacity. However, since LocalStorage doesn't naturally resonate through HTTP headers as cookies do, it requires a semi-automatic trigger to create resonance for delta data at the (/rhythm) path. The absence of auto-expiration and narrower browser support led to the cookie-based model becoming the primary release for its simplicity and universal compatibility.
 
 RHYTHM transforms users' browser cookies into small personal storage. With 100 million users, it's like having 100 million auxiliary databases. Each browser provides its own isolated execution environment, operating directly on devices without perceptible delay. For performance enhancement, HTTP/2 or HTTP/3 environments are recommended. Compression tables help cookies travel lighter.
 
@@ -899,7 +899,7 @@ const RHYTHM = {
 }
 ```
 
-**Security Note:** Place the /rhythm endpoint behind a reverse proxy with rate limiting, as it receives periodic HEAD requests for cookie synchronization.
+**Security Note:** Place the (/rhythm) endpoint behind a reverse proxy with rate limiting, as it receives periodic HEAD requests for cookie synchronization.
 
 ### Edge Setup (Recommended)
 
