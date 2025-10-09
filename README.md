@@ -488,7 +488,7 @@ detail page. Made a purchase decision in just 5 seconds after arriving.
 This shows a purposeful buyer who knew exactly what they wanted.
 ```
 
-Just as tab notation captures 6 lines of information on a flat surface, BEAT captures 3D behavioral data in a 1D string. AI immediately decodes this compressed 3D information to understand user intent.
+Just as guitar tab notation captures 6 strings on a page, BEAT captures multi-dimensional behavioral data as a 1D string that AI immediately decodes to understand user intent.
 
 The advantage of serialized linear sequences is their language-like structure requiring no interpretation. Unlike JSON's nested structures, BEAT reads straight through, relatively safe from parsing errors or structural ambiguity.
 
