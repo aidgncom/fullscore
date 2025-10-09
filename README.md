@@ -491,13 +491,13 @@ detail page. Made a purchase decision in just 5 seconds after arriving.
 This shows a purposeful buyer who knew exactly what they wanted.
 ```
 
-Just as guitar tab notation captures 6 strings on a page, BEAT captures multi-dimensional behavioral data as a 1D string that AI immediately decodes to understand user intent.
+Just as guitar tab notation captures 6 strings on a page, BEAT captures multi-dimensional behavioral data as a 1D string.
 
-The advantage of serialized linear sequences is their language-like structure requiring no interpretation. Unlike JSON's nested structures, BEAT reads straight through, relatively safe from parsing errors or structural ambiguity.
+Traditional raw data like JSON stores individual events as separate dots that need to be parsed and interpreted. BEAT is also raw data, but it connects these dots into flowing lines, much like musical notation, where the story of user behavior is already embedded.
 
-What matters is that with simple rules, AI immediately interprets. With just 3 rules for pages (!), time (~), and elements (*), AI understands `!home~300*3input1` as search after 30 seconds at home.
+BEAT's key advantage is that it enables accurate analysis simply by providing AI with straightforward rules. With just 3 rules for pages (!), time (~), and elements (*), AI understands `!home~300*3input1` as search after 30 seconds at home.
 
-While BEAT falls within domain-specific languages (DSL), its characteristic of being readable by both humans and AI suggests it's a new type of behavioral recording language.
+While BEAT falls within domain-specific languages (DSL), its characteristic of being readable by both humans and AI suggests it’s a new type of behavioral recording language.
 
 BEAT's recommended default uses only cookie-safe characters. This 100% complies with RFC 6265 standards, passing safely through Edge and other security barriers.
 
