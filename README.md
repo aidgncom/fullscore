@@ -531,7 +531,7 @@ shows a typical careful comparison shopper thoroughly evaluating before purchase
 
 Like a singer-songwriter switching between a ballad and an uptempo number on the same stage, users naturally flow between tabs while shopping. The ballad performance (rhythm_1) pauses mid-song, transitions to an uptempo performance (rhythm_2), then returns to the original mood. The (___N) notation captures these transitions precisely. All tabs perform on the same stage (sharing time and key), each delivering its own rhythm.
 
-For those seeking richer performances, scroll depth (^) can be added. Like reverb deepening a guitar's resonance, scroll positions show how deeply users engage:
+For those seeking richer performances, scroll depth (^) can be added. Like reverb deepening a guitar's resonance, scroll positions show how deeply users engage.
 
 ```
 rhythm_1 = !home~237*nav-2~542^600~282^150~1084*nav-3~328^800~47.123*help~894^1800~234*more-1~43!prod~1034*button-12~894^2100~156*p1___2~6323^100~267*mycart___3
