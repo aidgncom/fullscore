@@ -285,7 +285,7 @@ The tab chain (1~2~1~3~2) records the sequence as users switch between tabs. Thi
 
 Edge is the singer-songwriter's reliable companion, an indispensable friend. When the singer-songwriter performs their RHYTHM, Edge livestreams it to the world.
 
-The `/rhythm` path is an isolated internal route where Edge observes cookie headers, not an API endpoint for uploading data externally.
+The `/rhythm` path is an internal signal route where Edge observes cookie headers, not an API endpoint for uploading data. You can also configure Full Score to send data directly to external endpoints if needed.
 
 ```javascript
 // Live streaming handler - watches /rhythm path for real-time cookie resonance
