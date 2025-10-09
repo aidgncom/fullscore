@@ -14,7 +14,7 @@ Web technology has been a history of addition. More features, more data, more la
 
 Full Score takes a different approach. Instead of piling on more features, it keeps only what matters with 3KB (min+gzip) of code that proposes a new direction for analytics.
 
-- **Serverless Analytics** with No Endpoints & 90% Cost Reduction
+- **Serverless Analytics** with No API Endpoints & 90% Cost Reduction
 - **Complete Cross-tab User Journey** Without Session Replay
 - **Bot Detection & Human Personalization** via Real-time Behavioral Layer
 - **Human & AI-Readable Format** as Linear Strings, No Parsing
@@ -28,7 +28,7 @@ Traditional Analytics: Browser → API → Raw Database → Queue(Kafka) → Pro
 
 Full Score:  Browser ~ Edge → Archive
 // ✅ 2 Steps, $50/month
-// No data endpoints needed
+// No API endpoints needed
 // No Queue & Processing needed
 // You own all the raw data
 ```
@@ -285,6 +285,8 @@ The tab chain (1~2~1~3~2) records the sequence as users switch between tabs. Thi
 
 Edge is the singer-songwriter's reliable companion, an indispensable friend. When the singer-songwriter performs their RHYTHM, Edge livestreams it to the world.
 
+The `/rhythm` path is an isolated internal route where Edge observes cookie headers, not an API endpoint for uploading data externally.
+
 ```javascript
 // Live streaming handler - watches /rhythm path for real-time cookie resonance
 if (url.pathname === "/rhythm" && url.searchParams.has("livestreaming")) {
@@ -327,7 +329,7 @@ if (url.pathname === "/rhythm/echo" && request.method === "POST") {
 
 Edge analyzes every performance in real-time. The (/rhythm) path monitors cookie resonance through HEAD requests, while (/rhythm/echo) archives completed performances. Bot patterns like MachineGun (rapid clicks), Metronome (exact intervals), or Surface (shallow DOM) trigger security flags. Human patterns activate behavior flags for personalization. If someone hesitates before purchasing, you could show them a coupon.
 
-No data endpoints required. No separate analytics servers or central database queries needed. Browser and Edge connect closely in spacetime like sympathetic resonance, fast and vivid. Processing delays are imperceptibly low.
+No API endpoints required. No separate analytics servers or central database queries needed. Browser and Edge connect closely in spacetime like sympathetic resonance, fast and vivid. Processing delays are imperceptibly low.
 
 A traditional concert hall would be different. Without complex broadcast equipment, without separate studios, street music spreads worldwide.
 
@@ -682,7 +684,7 @@ Today's performances, recording nothing but pure rhythm without IP or names, eac
 
 Inside a piano lie over 230 strings. Strike one, and others with the same frequency resonate naturally. This is sympathetic resonance.
 
-Web cookies resonate too. With every page request, cookies automatically travel in HTTP headers. No developer instructions needed, no extra endpoint code required. This web resonance phenomenon has continued since 1994.
+Web cookies resonate too. With every page request, cookies automatically travel in HTTP headers. No developer instructions needed, no API endpoint required. This web resonance phenomenon has continued since 1994.
 
 Traditional analytics tools ignored this natural resonance to build separate synthesizers. They collect data with scripts, transmit via APIs, process on servers.
 
@@ -743,7 +745,7 @@ Before music begins, the breathless moment as the audience awaits the performer'
 
 Only simple patterns are recorded, not sensitive personal information (PII), eliminating data leakage risks. As resonance occurs directly between browser and Edge without origin server involvement, interception becomes significantly more difficult. Hacking Full Score's decentralized data would require compromising every individual user's browser visiting the website.
 
-Faster page loads are just the beginning. The real key is that without configuring data endpoints, Edge completes real-time analysis just by listening to RHYTHM already flowing in the air. While traditional tools prepare numerous instruments for collection, transmission, processing, and storage, Full Score quickly begins the next performance.
+Faster page loads are just the beginning. The real key is that without configuring API endpoints, Edge completes real-time analysis just by listening to RHYTHM already flowing in the air. While traditional tools prepare numerous instruments for collection, transmission, processing, and storage, Full Score quickly begins the next performance.
 
 First-party cookies automatically disappear after a few days. GDPR risk is much lower than existing analytics tools. Like street music scattering in the wind, data naturally dissipates over time. Free because it doesn't promise eternity.
 
