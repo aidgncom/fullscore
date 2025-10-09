@@ -24,7 +24,7 @@ All while achieving a decentralized paradigm using browsers like auxiliary datab
 
 ```
 Traditional Analytics: Browser → API → Raw Database → Queue(Kafka) → Processing(Spark) → Processed Database → Archive
-// ⛔ 7 Steps, $5,000+/month
+// ⛔ 7 Steps, $1,000+/month
 
 Full Score:  Browser ~ Edge → Archive
 // ✅ 2 Steps, $50/month
