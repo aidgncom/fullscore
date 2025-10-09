@@ -479,7 +479,10 @@ Despite these various possibilities, BEAT considers the default most ideal. Here
 BEAT transforms multi-dimensional behavioral data of time, space, and action with depth into linear sequences. It compresses multidimensional logs into single strings that can be directly input into sequence models.
 
 ```
-Human: "!home~300*3input1~1200!page~50*button"
+rhythm_1 = !home~300*3input1~1200!page~50*button
+
+Human interpretation:
+"Let's see... homepage to product page, took about 3 minutes total."
 
 AI interpretation:
 User arrived at homepage and searched for products after 30 seconds.
