@@ -58,8 +58,6 @@ Full Score consists of three independent technologies. Each is useful alone, yet
 
 These three technologies are like a jazz trio where each solo performance is excellent, but together they create true harmony. Add Edge computing, and the quartet performs at its full potential.
 
-For a quick overview, check out the live demo: [fullscore.org](https://fullscore.org/)
-
 <br />
 
 ## Second Movement: TEMPO - The Piano Tuner's Gift
@@ -241,7 +239,7 @@ RHYTHM stores session data like a rhythm composed of notes on a staff. Each note
 const rhythm_1 = {
 	echo: 0,            // Performance status (0=performing, 1=storing, 2=archiving)
 	time: 1735680000,   // Stage start time (synchronization reference for all tabs)
-	key: 'x7n4kb2p',    // Stage name (random string for data integrity)
+	hash: 'x7n4kb2p',    // Stage name (random string for data integrity)
 	device: 1,          // Instrument type (0=desktop, 1=mobile, 2=tablet)
 	referrer: 3,        // Performance spot (0=direct, 1=internal, 2=unknown, 3-255=specific domains)
 	scrolls: 23,        // Scroll gestures (passersby who stopped)
@@ -254,7 +252,11 @@ const rhythm_1 = {
 When stored in cookies, this data becomes a single line of sheet music separated by underscores (_).
 
 ```
+// Private Mode (no direct identifiers)
 "0_1735680000_x7n4kb2p_1_3_23_45_300_!home~10*1~"
+
+// Full Private Mode (no direct/indirect identifiers)
+"0___1_3_23_45_300_!home~10*1~"
 ```
 
 A single line expresses an entire session. If JSON is conducting each orchestra section, RHYTHM is as concise as playing guitar tabs.
@@ -274,7 +276,7 @@ score=0000000000_1735680000_x7n4kb2p___1~2~1~3~2
 
 // 0000000000  = Bot/Human flags (first digit: bot level, rest: behavior flags)
 // 1735680000  = Stage start time (synchronization reference for all tabs)
-// x7n4kb2p    = Stage key (random string for data integrity)
+// x7n4kb2p    = Stage hash (random string for data integrity)
 // 1~2~1~3~2   = Tab chain (also embedded in BEAT as addon: ___N)
 ```
 
@@ -318,7 +320,7 @@ if (url.pathname === "/rhythm" && url.searchParams.has("livestreaming")) {
 
 // Batch archiving handler - collects completed performances
 if (url.pathname === "/rhythm/echo" && request.method === "POST") {
-    const sessions = await request.text(); // rhythm_1=2_time_key_device...
+    const sessions = await request.text(); // rhythm_1=2_time_hash_device...
     
     // Optional AI analysis of complete user journey
     if (ARCHIVING.AI && env.AI) {
@@ -513,33 +515,26 @@ This results in at least 20× smaller total data volume compared to traditional 
 BEAT captures cross-tab browsing journeys in a complete Full Score.
 
 ```
-rhythm_1 = !home~237*nav-2~1908*nav-3~375.123*help~1128*more-1~43!prod~1034*button-12~1050*p1___2~6590*mycart___3
-rhythm_2 = !p1~2403*img-1~1194*buy-1~13.8.8*buy-1-up~532*review~14!review~2018*nav-1___1
-rhythm_3 = !cart
+rhythm_1=2___1_0_32_8_12488_!home~237*nav-2~1908*nav-3~375.123*help~1128*more-1~43!prod~1034*button-12~1050*p1___2~6590*mycart___3
+rhythm_2=2___1_1_24_7_6190_!p1~2403*img-1~1194*buy-1~13.8.8*buy-1-up~532*review~14!review~2018*nav-1___1
+rhythm_3=2___1_1_0_0_50_!cart
 
 AI interpretation:
-User arrived at homepage and clicked first navigation menu after 23.7 seconds.
-Stayed for about 3 minutes before clicking second navigation. In the help section,
-an interesting pattern emerges - clicks at 37.5 and 12.3 second intervals showing
-hesitation. After moving to product page, clicked a product link opening a new tab.
-
-Spent 4 minutes on product details, 2 minutes viewing images. Cart button clicked
-rapidly three times at 1.3, 0.8, and 0.8 second intervals - likely adjusting
-quantity or options. Moved to reviews for 3 minutes reading customer feedback.
-
-Upon returning to the original tab, 11 minutes had elapsed since opening tab 2.
-Without hesitation, immediately clicked cart link opening third tab. This pattern
-shows a typical careful comparison shopper thoroughly evaluating before purchase.
+[CONTEXT] Mobile user, direct visit, 56 scrolls, 15 clicks, 1872.8 seconds
+[TIMELINE] User landed on homepage and clicked navigation after 23.7 seconds, browsed for about 180 seconds before clicking another menu. In the help section, repetitive clicks at 37.5 and 12.3 second intervals reveal hesitation. After navigating to product page, opened product details in a new tab. Spent 240 seconds reviewing images in tab 2, clicked buy button in rapid succession at 1.3, 0.8, and 0.8 second intervals (adjusting quantity/options), then read reviews for 180 seconds. Returned to original tab after 660 seconds and opened cart in a third tab.
+[PATTERN] Careful comparison shopper – Multi-tab information gathering, repetitive pattern in help section (~37.5, 12.3), rapid sequential buy button clicks (~1.3, 0.8, 0.8) are characteristic behaviors.
+[ISSUE] Failed checkout conversion – Reached cart but didn't complete purchase. The 660-second tab switching suggests competitor comparison or additional research.
+[ACTION] Add one-click purchase option – Rapid buy button clicks (~1.3, 0.8, 0.8) indicate friction in quantity/option selection. Implement more intuitive UI and prominently display FAQs in help section where hesitation patterns occurred.
 ```
 
-Like a singer-songwriter switching between a ballad and an uptempo number on the same stage, users naturally flow between tabs while shopping. The ballad performance (rhythm_1) pauses mid-song, transitions to an uptempo performance (rhythm_2), then returns to the original mood. The (___N) notation captures these transitions precisely. All tabs perform on the same stage (sharing time and key), each delivering its own rhythm.
+Like a singer-songwriter switching between a ballad and an uptempo number on the same stage, users naturally flow between tabs while shopping. The ballad performance (rhythm_1) pauses mid-song, transitions to an uptempo performance (rhythm_2), then returns to the original mood. The (___N) notation captures these transitions precisely. All tabs perform on the same stage (sharing time and hash), each delivering its own rhythm.
 
 For those seeking richer performances, scroll depth (^) can be added. Like reverb deepening a guitar's resonance, scroll positions show how deeply users engage.
 
 ```
-rhythm_1 = !home~237*nav-2~542^600~282^150~1084*nav-3~328^800~47.123*help~894^1800~234*more-1~43!prod~1034*button-12~894^2100~156*p1___2~6323^100~267*mycart___3
-rhythm_2 = !p1~142^200~527^800~1200^1280~534*img-1~156^750~1038*buy-1~13.8.8*buy-1-up~532*review~14!review~702^800~334^1400~982*nav-1___1
-rhythm_3 = !cart
+!home~237*nav-2~542^600~282^150~1084*nav-3~328^800~47.123*help~894^1800~234*more-1~43!prod~1034*button-12~894^2100~156*p1___2~6323^100~267*mycart___3
+!p1~142^200~527^800~1200^1280~534*img-1~156^750~1038*buy-1~13.8.8*buy-1-up~532*review~14!review~702^800~334^1400~982*nav-1___1
+!cart
 ```
 
 Even without depth markers, click patterns alone reveal remarkably detailed stories. Help-seeking moments (~375.123), rapid cart adjustments (~13.8.8), long contemplation (~2403).
@@ -648,7 +643,7 @@ rhythm_3 = "0_1735720800_x7n4kb2p_1_1_27_52_2100_!prod~79*12button1~52*5a1~14!ho
 
 The user reopens the browser. Finding cookies with echo=0, these interrupted performances are still waiting. The singer-songwriter sees the audience who stayed through the rain. Moved, the singer-songwriter decides to preserve the existing performances and prepare a special encore for them.
 
-The interrupted rhythms shift to echo=1 for safekeeping. Edge detects this change and pauses the existing livestream. A fresh livestream immediately begins for the encore. The stage keeps its original time and key.
+The interrupted rhythms shift to echo=1 for safekeeping. Edge detects this change and pauses the existing livestream. A fresh livestream immediately begins for the encore. The stage keeps its original time and hash.
 
 ```javascript
 // Recovery process - interrupted performances stored
@@ -911,7 +906,8 @@ const RHYTHM = {
 
 ### Edge Setup (Recommended)
 
-Edge transforms Full Score into a real-time analytics layer, with no API endpoints required. See Demo and Edge Runner below.
+Edge transforms Full Score into a real-time analytics layer, with no API endpoints required. Setup is simple but requires careful attention to each step.
+Follow this video tutorial: (Coming soon)
 
 <br />
 
