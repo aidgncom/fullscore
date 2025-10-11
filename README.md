@@ -56,6 +56,8 @@ Full Score consists of three independent technologies. Each is useful alone, yet
 
 These three technologies are like a jazz trio where each solo performance is excellent, but together they create true harmony. Add Edge computing, and the quartet performs at its full potential.
 
+For a quick overview, check out the live demo: [fullscore.org](https://fullscore.org/)
+
 <br />
 
 ## Second Movement: TEMPO - The Piano Tuner's Gift
@@ -907,78 +909,13 @@ const RHYTHM = {
 
 ### Edge Setup (Recommended)
 
-Together with Edge, Full Score creates perfect harmony as decentralized analytics with real-time security & personalization. See Demo and Edge Runner below.
+Edge transforms Full Score into a real-time analytics layer, with no API endpoints required. See Demo and Edge Runner below.
 
 <br />
 
 ## Demo
 
-<img width="1920" height="1080" alt="fullscore-01" src="https://github.com/user-attachments/assets/9a74cc08-656d-4a13-8055-14f2aca8534d" />
-01. Deploy anywhere in your website, so lightweight that inline works perfectly
-<br />
-<br />
-
-<img width="1920" height="1080" alt="fullscore-02" src="https://github.com/user-attachments/assets/e1731c73-6d46-4913-b4c0-ac2bb6bfc0c7" />
-02. Works instantly without configuration
-<br />
-<br />
-
-<img width="1920" height="1080" alt="fullscore-03" src="https://github.com/user-attachments/assets/ec48de59-c911-4218-8e06-a7be53403d2f" />
-03. Set Edge route to yourdomain.com/rhythm*
-<br />
-<br />
-
-<img width="1920" height="1080" alt="fullscore-04" src="https://github.com/user-attachments/assets/caab5d82-7234-4230-b2d2-74e87a407378" />
-04. Edge Runner implementation in worker.js
-<br />
-<br />
-
-<img width="1920" height="1080" alt="fullscore-05" src="https://github.com/user-attachments/assets/23b53332-1f2b-41b4-bbe7-89589fa7d82e" />
-05. Real-time AI insights available in logs, unified processing via cloud storage recommended
-<br />
-<br />
-
-<img width="1920" height="1080" alt="fullscore-06" src="https://github.com/user-attachments/assets/65dca9bd-8cbe-4ae2-9be5-764f784a2490" />
-06. Real-time pattern detection enables instant bot blocking and human personalization
-<br />
-<br />
-
-<img width="1920" height="1080" alt="fullscore-07" src="https://github.com/user-attachments/assets/ddef9e0d-b9b3-430e-84bc-6069b5effe92" />
-07. WAF configuration example based on Score security levels
-<br />
-<br />
-
-<img width="1920" height="1080" alt="fullscore-08" src="https://github.com/user-attachments/assets/e73abe3a-450c-4e2b-9037-c2204c22a454" />
-08. Live /rhythm/?livestreaming requests appearing sequentially in Worker
-<br />
-<br />
-
-<img width="1920" height="1080" alt="fullscore-09" src="https://github.com/user-attachments/assets/cd8654e8-40b0-497f-9c9a-403513f93e0d" />
-09. Debug mode reveals real-time pattern detection in logs
-<br />
-<br />
-
-<img width="1920" height="1080" alt="fullscore-10" src="https://github.com/user-attachments/assets/88ed70c1-0009-4a54-b89b-2109dd6cb706" />
-10. Single /rhythm/echo resonance capturing complete browsing journey
-<br />
-<br />
-
-<img width="1920" height="1080" alt="fullscore-11" src="https://github.com/user-attachments/assets/fac5de60-71fa-41e1-ac5f-a475eb1eab36" />
-11. Cloudflare Edge enables direct GCP log push with minimal setup
-<br />
-<br />
-
-<img width="1920" height="1080" alt="fullscore-12" src="https://github.com/user-attachments/assets/9b766e1d-8a65-4cf0-9edf-992aa8616dd0" />
-12. Only Logs setup required as RHYTHM data arrives complete
-<br />
-<br />
-
-<img width="1920" height="1080" alt="fullscore-13" src="https://github.com/user-attachments/assets/67f7d6af-60be-4268-bada-5b40910a2238" />
-13. Pushed log data automatically sorted by date for easy management
-<br />
-<br />
-
-**You own all the raw data.** Send it to BigQuery to build visualization systems, or pass it to AI trained on the BEAT format for collaborative analysis.
+For a quick overview, check out the live demo: [fullscore.org](https://fullscore.org/)
 
 <br />
 
@@ -986,11 +923,6 @@ Together with Edge, Full Score creates perfect harmony as decentralized analytic
 
 - **Full Score**: Web's Native Performance [github.com/aidgncom/fullscore](https://github.com/aidgncom/fullscore/)
 - **Edge Runner**: Web's Resonance Interpreter [github.com/aidgncom/edgerunner](https://github.com/aidgncom/edgerunner/)
-
-<br />
-
-## Author
-
-Aidgn - [GitHub Profile](https://github.com/aidgncom/)
+- **Email**: [info@aidgn.com](mailto:info@aidgn.com)
 
 <br />
