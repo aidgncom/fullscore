@@ -34,6 +34,8 @@ Full Score:  Browser ~ Edge → Archive
 
 I've tried to keep the technical explanations from being too dry, but if you find yourself losing steam, feel free to skip to the Fifth Movement to see how everything comes together.
 
+For a quick overview, check out the live demo: [fullscore.org](https://fullscore.org/)
+
 <br />
 
 ## First Movement: Web Interactions Become Music
