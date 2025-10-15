@@ -39,8 +39,8 @@ const BEAT = { 	// Behavioral Event Analytics Transform
 		P: '!',			// Page
 		E: '*',			// Element
 		T: '~',			// Time
-		A: '.',			// Again
-		L: '.',			// Loop
+		A: '/',			// Again
+		L: '-',			// Loop
 	},
 	MAP: {				// Manual mapping (default: automatic)
 		P: {					// Page URL paths
@@ -387,7 +387,7 @@ class Rhythm {
 					const mem = this.beat.flow();
 					let i = 0;
 					while (flow[i] === mem[i]) i++; // Find exact divergence point for integrity
-					this.beat.notes = [flow + mem.slice(i)]; // Merge flows
+					this.beat.notes = [flow + mem.slice(i).replace(/^\/+/, BEAT.TOK.T)]; // Merge flows
 				}
 			}
 		}
