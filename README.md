@@ -364,7 +364,7 @@ Listen to the story this short performance tells. A user takes the homepage (!ho
 
 ### Grammar Recording Flow Like Musical Notes
 
-BEAT records performance order as follows:
+BEAT records performance order as follows. Symbol assignments are customizable using any RFC 6265 cookie-octet characters.
 
 **Pages (!) - Moments of changing songs**
 - !home: Overture (homepage, only reserved word)
@@ -500,7 +500,7 @@ Just as guitar tab notation captures 6 strings on a page, BEAT captures multi-di
 
 Traditional raw data like JSON stores individual events as separate dots that need to be parsed and interpreted. BEAT is also raw data, but it connects these dots into flowing lines, much like musical notation, where the story of user behavior is already embedded.
 
-BEAT's key advantage is that it enables accurate analysis simply by providing AI with straightforward rules. With just 3 rules for pages (!), time (~), and elements (*), AI understands `!home~300*3input1` as search after 30 seconds at home.
+BEAT's key advantage is accurate analysis by assigning any RFC 6265 cookie-octet characters to behavioral elements such as pages (!), time (~), and actions (*). AI immediately understands patterns like `!home~300*3nav1` as navigation after 30 seconds at home.
 
 While BEAT falls within domain-specific languages (DSL), its characteristic of being readable by both humans and AI suggests it’s a new type of behavioral recording language.
 
