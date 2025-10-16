@@ -193,14 +193,17 @@ class Beat {
 	element(e) { // Record element clicks as a linear DOM depth string
 		if (!e || e.nodeType === 3 && !(e = e.parentElement)) return;
 		this.time();
-		const key = e.id ? '#' + e.id : typeof e.className === 'string' && e.className ? '.' + e.className.trim().split(/\s+/)[0] : null;
-		if (key && this.maps.elements[key]) return void this.fold(BEAT.TOK.E + this.maps.elements[key]); // Pre-mapped elements applied immediately
+		let key = e.id && this.maps.elements['#' + e.id] ? '#' + e.id : null;
+		if (!key && typeof e.className === 'string' && e.className) key = e.className.trim().split(/\s+/).map(c => '.' + c).find(k => this.maps.elements[k]);
+		if (key) return void this.fold(BEAT.TOK.E + this.maps.elements[key]); // Pre-mapped elements applied immediately
 		let depth = 0, el = e; // Calculate DOM depth
 		while (el && el !== document.body) depth++, el = el.parentElement;
 		const tag = e.tagName.toLowerCase();
 		let index = 1, prev = e.previousElementSibling;
 		while (prev) prev.tagName.toLowerCase() === tag && index++, prev = prev.previousElementSibling;
-		this.fold(BEAT.TOK.E + depth + tag + index);
+		const auto = depth + tag + index;
+		const mapped = this.maps.elements['*' + auto];
+		this.fold(BEAT.TOK.E + (mapped || auto));
 	}
 	flow() { return this.notes.join(''); } // Generate final BEAT string
 }
