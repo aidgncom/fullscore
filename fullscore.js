@@ -195,6 +195,8 @@ class Beat {
 		this.time();
 		let key = e.id && this.maps.elements['#' + e.id] ? '#' + e.id : null;
 		if (!key && typeof e.className === 'string' && e.className) key = e.className.trim().split(/\s+/).map(c => '.' + c).find(k => this.maps.elements[k]);
+		const href = !key && e.tagName === 'A' && e.href && e.getAttribute('href');
+		if (href && this.maps.elements[href]) key = href;
 		if (key) return void this.fold(BEAT.TOK.E + this.maps.elements[key]); // Pre-mapped elements applied immediately
 		let depth = 0, el = e; // Calculate DOM depth
 		while (el && el !== document.body) depth++, el = el.parentElement;
