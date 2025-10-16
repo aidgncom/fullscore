@@ -14,11 +14,11 @@ Web technology has been a history of addition. More features, more data, more la
 
 Full Score takes a different approach. Instead of piling on more features, it keeps only what matters with 3KB (min+gzip) of code that proposes a new direction for analytics.
 
-- 🧭 **Serverless Analytics** with No API Endpoints & 90% Cost Reduction
-- 🔍 **Complete Cross-tab User Journey** Without Session Replay
-- 🧩 **Bot Detection & Human Personalization** via Real-time Behavioral Layer
-- 🧠 **BEAT Flows into AI Insights** as Linear Strings, No Parsing
-- 🛡️ **GDPR-Conscious Architecture** with Zero Direct Identifiers
+- **Serverless Analytics** with No API Endpoints & 90% Cost Reduction
+- **Complete Cross-tab User Journey** Without Session Replay
+- **Bot Detection & Human Personalization** via Real-time Behavioral Layer
+- **BEAT Flows into AI Insights** as Linear Strings, No Parsing
+- **GDPR-Conscious Architecture** with Zero Direct Identifiers
 
 All while achieving a decentralized paradigm using browsers like auxiliary databases.
 
