@@ -24,10 +24,10 @@ All while achieving a decentralized paradigm using browsers like auxiliary datab
 
 ```
 Traditional Analytics: Browser → API → Raw Database → Queue(Kafka) → Processing(Spark) → Processed Database → Archive
-// ⛔ 7 Steps, $1,000+/month
+// ⛔ 7 Steps, $1,000 – $5,000/month
 
 Full Score: Browser ~ Edge → Archive
-// ✅ 2 Steps, $50/month
+// ✅ 2 Steps, $50 – $500/month
 // No API endpoints needed
 // No Queue & Processing needed
 ```
@@ -496,7 +496,7 @@ detail page. Made a purchase decision in just 5 seconds after arriving.
 This shows a purposeful buyer who knew exactly what they wanted.
 ```
 
-Just as guitar tab notation captures 6 strings on a page, BEAT captures multi-dimensional behavioral data as a 1D string.
+Just as musical notation captures complex performances as linear sequences on paper, BEAT captures multi-dimensional behavioral data as 1D strings.
 
 Traditional raw data like JSON stores individual events as separate dots that need to be parsed and interpreted. BEAT is also raw data, but it connects these dots into flowing lines, much like musical notation, where the story of user behavior is already embedded.
 
