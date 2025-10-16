@@ -266,9 +266,9 @@ class Rhythm {
 		if (this.hasBeat) this.beat.element(el);
 		this.save();
 		const score = document.cookie.match(/score=([^;]+)/)?.[1]; // Bot Detection and Human Personalization
-		const field = score?.split('_')[0];
+		const field = score?.split('_')[0], waf = this.get('waf');
 		field && field !== this.score.split('_')[0] && (this.score = score, this.force = true); // Skip abort when field changes to fetch immediately
-		field && field[0] >= '1' && !document.cookie.includes('cf_chl') && !this.get('waf') && (document.cookie = 'waf=1; Path=/; Max-Age=10', location.replace(location.href)); // Update security field (OXXXXXXXXX)
+		field && field[0] >= '1' && (!waf || field[0] > waf) && (document.cookie = 'waf=' + field[0] + '; Path=/', location.replace(location.href)); // Update security field (OXXXXXXXXX)
 		for (let i = 1; field && i < 10; i++) field[i] === '1' && RHYTHM.HUM?.[i](this); // Update personalization field (XOOOOOOOOO)
 		if (this.data.clicks % RHYTHM.TAP === 0 || this.force) { // After first request, abort others to save bandwidth
 			const ctrl = new AbortController();
