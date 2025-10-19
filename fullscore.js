@@ -241,24 +241,25 @@ class Rhythm {
 			}, 150); // Reset after 150ms
 		}, {capture: true, passive: true});
 		RHYTHM.ADD.SPA && this.spa(); // Single Page Application addon (default: false)
-		const end = () => { // RHYTHM engine stop
-			if (this.ended) return; this.ended = true; // Prevent duplicate execution
-			if (RHYTHM.DEL > 0) {
-				for (let i = 1; i <= RHYTHM.MAX; i++) {
-					const name = 'rhythm_' + i;
-					const ses = this.get(name);
-					if (ses && +(ses.split('_')[6] || 0) < RHYTHM.DEL) { // Session deletion threshold (default: 1 clicks)
-						document.cookie = name + '=; Max-Age=0; Path=/';
-						if (name === window.name) this.data = null, this.beat = null, window.name = '';
-					}
-				}
-			}
+		document.addEventListener('visibilitychange', () => { // RHYTHM engine stop
 			const ses = this.get(window.name);
-			if (ses && ses[0] === '0') document.cookie = window.name + '=1' + ses.slice(1) + this.tail; // Mark as echo=1 temporarily, but quickly restores to echo=0 on refresh or navigation
-			setTimeout(() => /rhythm_\d+=0/.test(document.cookie) || this.batch(true), 1); // Skip batch if any echo=0 tabs exist
-		}; // setTimeout(1) isn't just for delay. Browsers can process short macrotasks after pagehide event
-		RHYTHM.ADD.POW && document.addEventListener('visibilitychange', () => document.visibilityState === 'hidden' && end(), { capture: true }); // Power Mode for immediate batch on visibility change (default: false)
-		window.addEventListener('pagehide', end, { capture: true });
+			if (document.visibilityState === 'hidden') {
+				if (RHYTHM.DEL > 0) for (let i = 1; i <= RHYTHM.MAX; i++) { // Session deletion threshold (default: 1 clicks)
+					const name = 'rhythm_' + i, s = this.get(name);
+					const del = s && +(s.split('_', 7)[6] || 0) < RHYTHM.DEL;
+					if (del) document.cookie = name + '=; Max-Age=0; Path=/';
+					if (del && name === window.name) this.data = null, this.beat = null, window.name = '';
+				}
+				if (RHYTHM.ADD.POW) return this.batch(true); // Power Mode for immediate batch
+				ses[0] === '0' && (document.cookie = window.name + '=1' + ses.slice(1) + this.tail); // Mark as echo=1 on hidden
+				setTimeout(() => !/rhythm_\d+=0/.test(document.cookie) && this.blur && !this.focus && this.batch(true), 2); // Batch if no active sessions
+			} else ses[0] === '1' && (document.cookie = window.name + '=0' + ses.slice(1) + this.tail); // Mark as echo=0 on visible
+		}); // setTimeout isn't just for delay, Browsers can process short macrotasks after pagehide event
+		if (!RHYTHM.ADD.POW) {
+			window.addEventListener('blur', () => document.visibilityState === 'hidden' && (this.blur = true, setTimeout(() => this.blur = false, 17)));
+			window.addEventListener('focus', () => document.visibilityState === 'visible' && (this.focus = true, setTimeout(() => this.focus = false, 17)));
+			window.addEventListener('pagehide', (e) => !e.persisted && setTimeout(() => !/rhythm_\d+=0/.test(document.cookie) && this.batch(true), 1)); // Batch fallback
+		}
 	}
 	click(el) { // Click action and cookie refresh
 		this.data || this.session();
