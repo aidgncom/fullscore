@@ -72,7 +72,8 @@ const RHYTHM = { // Real-time Hybrid Traffic History Monitor
 	MAX: 7,				// Maximum session count (default: 7 slots)
 	CAP: 3500,			// Maximum session capacity (default: 3500 bytes)
 	DEL: 1,				// Session deletion threshold (default: 1 clicks)
-						// Below threshold not batched, 0 means all sessions batched
+						// 1 means 0-click sessions are deleted before the batch
+						// 0 means all sessions proceed to the batch
 	REF: {				// Referrer mapping (0=direct, 1=internal, 2=unknown, 3-255=specific domains)
 		'google.com': 3,
 		'youtube.com': 4,
@@ -85,8 +86,6 @@ const RHYTHM = { // Real-time Hybrid Traffic History Monitor
 		TAB: true,		// BEAT Cross-tab tracking addon (default: true)
 		SCR: false,		// BEAT Scroll position tracking addon (default: false)
 		SPA: false,		// Single Page Application addon (default: false)
-		RCV: false,		// Keep crashed sessions for recovery after abnormal exit (default: false)
-						// However, session time before and after recovery will not be identical
 		POW: false,		// Power Mode for immediate batch on visibility change (default: false)
 						// To explain the default mode POW=false first,
 						// Full Score resonates the complete browsing journey including cross-tab only once.
@@ -215,7 +214,6 @@ class Rhythm {
 	constructor() { // RHYTHM engine start
 		this.hasBeat = typeof Beat !== 'undefined';
 		this.hasTempo = typeof tempo !== 'undefined';
-		this.ended = false;
 		this.tail = '; Path=/; Max-Age=' + RHYTHM.AGE + '; SameSite=Lax' + (location.protocol === 'https:' ? '; Secure' : ''); // Session retention period (default: 3 days)
 		if (!this.get('score')) { // Browser session orchestrator
 			this.clean(); // Remove echo=2 completed sessions
@@ -250,15 +248,15 @@ class Rhythm {
 					if (del) document.cookie = name + '=; Max-Age=0; Path=/';
 					if (del && name === window.name) this.data = null, this.beat = null, window.name = '';
 				}
-				if (RHYTHM.ADD.POW) return this.batch(true); // Power Mode for immediate batch
+				if (RHYTHM.ADD.POW) return this.batch(); // Power Mode for immediate batch
 				ses[0] === '0' && (document.cookie = window.name + '=1' + ses.slice(1) + this.tail); // Mark as echo=1 on hidden
-				setTimeout(() => !/rhythm_\d+=0/.test(document.cookie) && this.blur && !this.focus && this.batch(true), 2); // Batch if no active sessions
+				setTimeout(() => !/rhythm_\d+=0/.test(document.cookie) && this.blur && !this.focus && this.batch(), 1); // Batch if no active sessions
 			} else ses[0] === '1' && (document.cookie = window.name + '=0' + ses.slice(1) + this.tail); // Mark as echo=0 on visible
 		}); // setTimeout isn't just for delay, Browsers can process short macrotasks after pagehide event
 		if (!RHYTHM.ADD.POW) {
 			window.addEventListener('blur', () => document.visibilityState === 'hidden' && (this.blur = true, setTimeout(() => this.blur = false, 17)));
 			window.addEventListener('focus', () => document.visibilityState === 'visible' && (this.focus = true, setTimeout(() => this.focus = false, 17)));
-			window.addEventListener('pagehide', (e) => !e.persisted && setTimeout(() => !/rhythm_\d+=0/.test(document.cookie) && this.batch(true), 1)); // Batch fallback
+			window.addEventListener('pagehide', (e) => !e.persisted && setTimeout(() => !/rhythm_\d+=0/.test(document.cookie) && this.batch(), 0)); // Batch fallback
 		}
 	}
 	click(el) { // Click action and cookie refresh
@@ -284,24 +282,15 @@ class Rhythm {
 		const c = '; ' + document.cookie + ';', i = c.indexOf('; ' + g + '=');
 		return i < 0 ? null : c.slice(i + g.length + 3, c.indexOf(';', i + g.length + 3));
 	}
-	clean(force = false) { // Remove echo=2 completed sessions
+	clean() { // Remove echo=2 completed sessions
 		for (let i = 1; i <= RHYTHM.MAX; i++) {
-		    const name = 'rhythm_' + i;
-		    if (force || this.get(name)?.[0] === '2') document.cookie = name + '=; Max-Age=0; Path=/';
+			const name = 'rhythm_' + i;
+			if (this.get(name)?.[0] === '2') document.cookie = name + '=; Max-Age=0; Path=/';
 		}
-	    if (force) this.data = null, this.beat = null, window.name = '';
+		this.data = null, this.beat = null, window.name = '';
 	}
-	batch(force = false) { // Batch sessions to edge or custom endpoints
+	batch() { // Batch sessions to edge or custom endpoints
 		const cookies = document.cookie.match(/rhythm_\d+=[^;]*/g);
-		if (!force) {
-			if (cookies) {
-				for (let i = 0; i < cookies.length; i++) { // Preserve crashed sessions as echo=1
-					const updated = cookies[i].replace(/=./, '=1');
-					document.cookie = updated + this.tail;
-				}
-			}
-			if (RHYTHM.ADD.RCV === true) return; // Keep crashed sessions for recovery after abnormal exit (default: false)
-		}
 		if (cookies) {
 			const updates = []; // Gather echo data
 			for (let i = 0; i < cookies.length; i++) {
@@ -315,7 +304,7 @@ class Rhythm {
 				navigator.sendBeacon(url, data) || fetch(url, {method: 'POST', body: data, keepalive: true}).catch(() => {}); // Send with fallback
 			}
 		}
-		this.clean(true);
+		this.clean();
 	}
 	session(force = false) { // Session management
 		if (!force) {
@@ -327,27 +316,19 @@ class Rhythm {
 					this.data = {name: window.name, time: +parts[1], key: parts[2], device: +parts[3], referrer: +parts[4], scrolls: +parts[5], clicks: +parts[6]}; // Convert string to object
 					if (this.hasBeat) {
 						this.beat = new Beat();
-						if (flow) {
-							this.beat.notes = [flow];
-							this.beat.tick = Date.now(); // Initialize timing
-						}
+						if (flow) this.beat.notes = [flow], this.beat.tick = Date.now(); // Initialize timing
 						this.beat.page(location.pathname); // Add current page to BEAT
 					}
-					this.save(); // Save updated session
-					return;
+					return this.save(); // Save updated session
 				}
 				window.name = ''; // Clear invalid session
 			}
 		}
 		let name = null; // Available session slot finder
-		for (let i = 1; i <= RHYTHM.MAX; i++) { // Maximum session count (default: 7)
-			if (!this.get('rhythm_' + i)) {
-				name = 'rhythm_' + i;
-				break;
-			}
-		}
+		for (let i = 1; i <= RHYTHM.MAX; i++) // Maximum session count (default: 7)
+			if (!this.get('rhythm_' + i)) { name = 'rhythm_' + i; break; }
 		if (!name) { // If all sessions in use
-			this.batch(true); 
+			this.batch(); 
 			this.data = null; // Cookie-based leader election without coordination overhead
 			const newTime = Math.floor(Date.now() / RHYTHM.TIC);
 			document.cookie = 'score=' + this.score.split('_')[0] + '_' + newTime + '_' + this.key + '___; Path=/; SameSite=Lax' + (location.protocol === 'https:' ? '; Secure' : ''); // New score signal
@@ -361,10 +342,7 @@ class Rhythm {
 		let index = !ref ? 0 : domain === location.hostname ? 1 : 2;
 		if (index === 2 && domain) for (const key in RHYTHM.REF) if (domain === key || domain.endsWith('.' + key)) { index = RHYTHM.REF[key]; break; } // Referrer mapping (0=direct, 1=internal, 2=unknown, 3-255=specific domains)
 		this.data = {name: name, time: this.time, key: this.key, device: /mobi/i.test(ua) ? 1 : /tablet|ipad/i.test(ua) ? 2 : 0, referrer: index, scrolls: 0, clicks: 0}; // Create new session
-		if (this.hasBeat) {
-			this.beat = new Beat(); // Create new BEAT instance
-			this.beat.page(location.pathname);
-		}
+		if (this.hasBeat) this.beat = new Beat(), this.beat.page(location.pathname); // Create new BEAT instance
 		this.save();
 	}
 	save() { // Save session data to cookie
@@ -384,26 +362,15 @@ class Rhythm {
 				const before = tabs.split('~').pop();
 				if (before && before !== number) {
 					const ses = this.get('rhythm_' + before); // Mark tab switch in previous session
-					if (ses && ses[0] === '0') {
-						const flow = ses.split('_');
-						flow[flow.length - 1] += '___' + number;
-						document.cookie = 'rhythm_' + before + '=' + flow.join('_') + this.tail;
-					}
+					if (ses) document.cookie = 'rhythm_' + before + '=' + ses + '___' + number + this.tail;
 				}
 			}
 		}
 		if (this.hasBeat && RHYTHM.ADD.TAB && !RHYTHM.ADD.POW) { // BEAT Cross-tab tracking addon (default: true)
 			const ses = this.get(window.name);
-			if (ses && ses[0] === '0') {
-				const flow = ses.split('_').slice(8).join('_');
-				if (flow.match(/___\d+$/)) { // Tab switch marker detected
-					const mem = this.beat.flow();
-					let i = 0;
-					while (flow[i] === mem[i]) i++; // Find exact divergence point for integrity
-					this.beat.notes = [flow + mem.slice(i).replace(/^\/+/, BEAT.TOK.T)]; // Merge flows
-				}
-			}
-		}
+			if (ses) { const flow = ses.split('_').slice(8).join('_');
+				if (flow.match(/___\d+$/)) { const mem = this.beat.flow(); let i = 0; while (flow[i] === mem[i]) i++; // Tab switch marker detected
+				this.beat.notes = [flow + mem.slice(i).replace(/^\/+/, BEAT.TOK.T)]; } } } // Merge flows
 		const save = [0, this.data.time, this.data.key, this.data.device, this.data.referrer, this.data.scrolls, this.data.clicks, Math.floor(Date.now() / RHYTHM.TIC) - this.data.time, this.beat?.flow() || ''].join('_'); // Build session string
 		document.cookie = this.data.name + '=' + save + this.tail;
 		if (save.length > RHYTHM.CAP) { // Maximum session capacity (default: 3500 bytes)
