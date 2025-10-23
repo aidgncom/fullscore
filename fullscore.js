@@ -151,15 +151,14 @@ function tempo(rhythm) { // Tap Event Method Performance Optimizer
 }
 // tempo(); // Uncomment for standalone use
 class Beat {
-	constructor(config = {}) { // BEAT core start
-		this.config = { timeUnit: BEAT.TIC, ...config };
+	constructor() { // BEAT core start
 		this.notes = [];
 		this.table = {};
 		this.maps = { pages: { ...BEAT.MAP.P }, elements: { ...BEAT.MAP.E } };
 		this.tick = Date.now();
 	}
 	time() { // Record elapsed time
-		const now = Date.now(), elapsed = Math.floor((now - this.tick) / this.config.timeUnit);
+		const now = Date.now(), elapsed = ((now - this.tick) / BEAT.TIC) | 0;
 		if (elapsed > 0) {
 			this.notes.push(BEAT.TOK.T + elapsed);
 			this.tick = now;
