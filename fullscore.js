@@ -166,7 +166,7 @@ class Beat {
 	}
 	page(p) { // Generate and record page hash
 		this.time();
-		if (this.maps.pages[p]) return void this.notes.push(BEAT.TOK.P + this.maps.pages[p]); // Pre-mapped pages applied immediately
+		if (this.maps.pages[p]) return this.notes.push(BEAT.TOK.P + this.maps.pages[p]); // Pre-mapped pages applied immediately
 		let hash = 5381; // DJB2 hash algorithm
 		for (let i = 0; i < p.length; i++) hash = ((hash << 5) + hash) + p.charCodeAt(i);
 		const chars = '0123456789abcdefghijklmnopqrstuvwxyz', limit = p.length <= 7 ? 3 : p.length <= 14 ? 4 : 5; // Dynamic hash by URL length
@@ -196,7 +196,7 @@ class Beat {
 		if (!key && typeof e.className === 'string' && e.className) key = e.className.trim().split(/\s+/).map(c => '.' + c).find(k => this.maps.elements[k]);
 		const href = !key && e.tagName === 'A' && e.href && e.getAttribute('href');
 		if (href && this.maps.elements[href]) key = href;
-		if (key) return void this.fold(BEAT.TOK.E + this.maps.elements[key]); // Pre-mapped elements applied immediately
+		if (key) return this.fold(BEAT.TOK.E + this.maps.elements[key]); // Pre-mapped elements applied immediately
 		let depth = 0, el = e; // Calculate DOM depth
 		while (el && el !== document.body) depth++, el = el.parentElement;
 		const tag = e.tagName;
@@ -279,7 +279,6 @@ class Rhythm {
 			if (this.data.clicks > RHYTHM.TAP && !this.force) setTimeout(() => ctrl.abort(), RHYTHM.THR); // Session refresh cycle (default: 3 clicks)
 			this.force = false;
 		}
-		return el;
 	}
 	clean() { // Remove echo=2 completed sessions
 		for (let i = 1; i <= RHYTHM.MAX; i++) {
@@ -372,10 +371,7 @@ class Rhythm {
 				this.beat.notes = [flow + mem.slice(i).replace(/^\/+/, BEAT.TOK.T)]; } } } // Merge flows
 		const save = [0, this.data.time, this.data.key, this.data.device, this.data.referrer, this.data.scrolls, this.data.clicks, Math.floor(Date.now() / RHYTHM.TIC) - this.data.time, this.beat?.flow() || ''].join('_'); // Build session string
 		document.cookie = this.data.name + '=' + save + this.tail;
-		if (save.length > RHYTHM.CAP) { // Maximum session capacity (default: 3500 bytes)
-			document.cookie = this.data.name + '=' + ('1' + save.slice(1)) + this.tail; // Mark as echo=1
-			return void this.session(true); // Rotate session if capacity exceeded
-		}
+		if (save.length > RHYTHM.CAP) return document.cookie = this.data.name + '=' + ('1' + save.slice(1)) + this.tail, this.session(true); // Maximum session capacity (default: 3500 bytes)
 	}
 	spa() { // Single Page Application addon (default: false)
 		const self = this;
