@@ -249,14 +249,14 @@ class Rhythm {
 					if (del && name === window.name) this.data = null, this.beat = null, window.name = '';
 				}
 				if (RHYTHM.ADD.POW) return this.batch(); // Power Mode for immediate batch
-				ses[0] === '0' && (document.cookie = window.name + '=1' + ses.slice(1) + this.tail); // Mark as echo=1 on hidden
-				setTimeout(() => !/rhythm_\d+=0/.test(document.cookie) && this.blur && !this.focus && this.batch(), 1); // Batch if no active sessions
-			} else ses[0] === '1' && (document.cookie = window.name + '=0' + ses.slice(1) + this.tail); // Mark as echo=0 on visible
+				/mobi|android|tablet|ipad|iphone/i.test(navigator.userAgent) && ses && ses[0] === '0' && (document.cookie = window.name + '=1' + ses.slice(1) + this.tail);
+				setTimeout(() => !/rhythm_\d+=0/.test(document.cookie) && this.blur && this.batch(), 1); // Batch if no active sessions
+			} else ses && ses[0] === '1' && (document.cookie = window.name + '=0' + ses.slice(1) + this.tail);
 		}); // setTimeout isn't just for delay, Browsers can process short macrotasks after pagehide event
 		if (!RHYTHM.ADD.POW) {
-			window.addEventListener('blur', () => document.visibilityState === 'hidden' && (this.blur = true, setTimeout(() => this.blur = false, 17)));
-			window.addEventListener('focus', () => document.visibilityState === 'visible' && (this.focus = true, setTimeout(() => this.focus = false, 17)));
-			window.addEventListener('pagehide', (e) => !e.persisted && setTimeout(() => !/rhythm_\d+=0/.test(document.cookie) && this.batch(), 0)); // Batch fallback
+			const mark = () => {const ses = this.get(window.name); ses && ses[0] === '0' && (document.cookie = window.name + '=1' + ses.slice(1) + this.tail);}; // Mark as echo=1 on hide
+			window.addEventListener('blur', () => document.visibilityState === 'hidden' && (mark(), this.blur = true, setTimeout(() => this.blur = false, 17)));
+			window.addEventListener('pagehide', e => !e.persisted && (mark(), setTimeout(() => !/rhythm_\d+=0/.test(document.cookie) && this.batch(), 1))); // Batch if no active sessions
 		}
 	}
 	click(el) { // Click action and cookie refresh
@@ -341,7 +341,7 @@ class Rhythm {
 		const domain = ref?.match(/^https?:\/\/([^\/]+)/)?.[1] || ''; // Parse hostname from referrer URL
 		let index = !ref ? 0 : domain === location.hostname ? 1 : 2;
 		if (index === 2 && domain) for (const key in RHYTHM.REF) if (domain === key || domain.endsWith('.' + key)) { index = RHYTHM.REF[key]; break; } // Referrer mapping (0=direct, 1=internal, 2=unknown, 3-255=specific domains)
-		this.data = {name: name, time: this.time, key: this.key, device: /mobi/i.test(ua) ? 1 : /tablet|ipad/i.test(ua) ? 2 : 0, referrer: index, scrolls: 0, clicks: 0}; // Create new session
+		this.data = {name: name, time: this.time, key: this.key, device: /ipad|tablet|silk/i.test(ua) || /android/i.test(ua) && !/mobi/i.test(ua) ? 2 : /mobi|iphone/i.test(ua) ? 1 : 0, referrer: index, scrolls: 0, clicks: 0}; // Create new session
 		if (this.hasBeat) this.beat = new Beat(), this.beat.page(location.pathname); // Create new BEAT instance
 		this.save();
 	}
