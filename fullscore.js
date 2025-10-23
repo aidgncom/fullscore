@@ -200,7 +200,7 @@ class Beat {
 		if (key) return void this.fold(BEAT.TOK.E + this.maps.elements[key]); // Pre-mapped elements applied immediately
 		let depth = 0, el = e; // Calculate DOM depth
 		while (el && el !== document.body) depth++, el = el.parentElement;
-		const tag = e.tagName.toLowerCase();
+		const tag = e.tagName;
 		let index = 1, prev = e.previousElementSibling;
 		while (prev) prev.tagName.toLowerCase() === tag && index++, prev = prev.previousElementSibling;
 		const auto = depth + tag + index;
@@ -259,12 +259,16 @@ class Rhythm {
 			window.addEventListener('pagehide', e => !e.persisted && (mark(), setTimeout(() => !/rhythm_\d+=0/.test(document.cookie) && this.batch(), 1))); // Batch if no active sessions
 		}
 	}
+	get(g) { // Get cookie
+		const c = '; ' + document.cookie + ';', i = c.indexOf('; ' + g + '=');
+		return i < 0 ? null : c.slice(i + g.length + 3, c.indexOf(';', i + g.length + 3));
+	}
 	click(el) { // Click action and cookie refresh
 		this.data || this.session();
 		this.data.clicks++;
 		if (this.hasBeat) this.beat.element(el);
 		this.save();
-		const score = document.cookie.match(/score=([^;]+)/)?.[1]; // Bot Detection and Human Personalization
+		const score = this.get('score'); // Bot Detection and Human Personalization
 		const field = score?.split('_')[0], waf = this.get('waf');
 		field && field !== this.score.split('_')[0] && (this.score = score, this.force = true); // Skip abort when field changes to fetch immediately
 		field && field[0] >= '1' && (!waf || field[0] > waf) && (document.cookie = 'waf=' + field[0] + '; Path=/', location.replace(location.href)); // Update security field (OXXXXXXXXX)
@@ -277,10 +281,6 @@ class Rhythm {
 			this.force = false;
 		}
 		return el;
-	}
-	get(g) { // Get cookie
-		const c = '; ' + document.cookie + ';', i = c.indexOf('; ' + g + '=');
-		return i < 0 ? null : c.slice(i + g.length + 3, c.indexOf(';', i + g.length + 3));
 	}
 	clean() { // Remove echo=2 completed sessions
 		for (let i = 1; i <= RHYTHM.MAX; i++) {
