@@ -371,7 +371,10 @@ class Rhythm {
 				this.beat.notes = [flow + mem.slice(i).replace(/^\/+/, BEAT.TOK.T)]; } } } // Merge flows
 		const save = [0, this.data.time, this.data.key, this.data.device, this.data.referrer, this.data.scrolls, this.data.clicks, Math.floor(Date.now() / RHYTHM.TIC) - this.data.time, this.beat?.flow() || ''].join('_'); // Build session string
 		document.cookie = this.data.name + '=' + save + this.tail;
-		if (save.length > RHYTHM.CAP) return document.cookie = this.data.name + '=' + ('1' + save.slice(1)) + this.tail, this.session(true); // Maximum session capacity (default: 3500 bytes)
+		if (save.length > RHYTHM.CAP) { // Maximum session capacity (default: 3500 bytes)
+			document.cookie = this.data.name + '=' + ('1' + save.slice(1)) + this.tail; // Mark as echo=1
+			this.session(true); // Rotate session if capacity exceeded
+		}
 	}
 	spa() { // Single Page Application addon (default: false)
 		const self = this;
