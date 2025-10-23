@@ -199,7 +199,7 @@ class Beat {
 		if (key) return this.fold(BEAT.TOK.E + this.maps.elements[key]); // Pre-mapped elements applied immediately
 		let depth = 0, el = e; // Calculate DOM depth
 		while (el && el !== document.body) depth++, el = el.parentElement;
-		const tag = e.tagName;
+		const tag = e.tagName.toLowerCase();
 		let index = 1, prev = e.previousElementSibling;
 		while (prev) prev.tagName.toLowerCase() === tag && index++, prev = prev.previousElementSibling;
 		const auto = depth + tag + index;
