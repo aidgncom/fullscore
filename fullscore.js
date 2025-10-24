@@ -266,7 +266,7 @@ class Rhythm {
 		this.save();
 		const score = this.get('score'); // Bot Detection and Human Personalization
 		const field = score?.split('_')[0], waf = this.get('waf');
-		field && field !== this.score.split('_')[0] && (this.score = score, this.force = true); // Skip abort when field changes to fetch immediately
+		field && field !== this.score.split('_')[0] && (this.score = score, this.force = RHYTHM.TAP); // Skip abort for next RHYTHM.TAP fetches when score field changes
 		field && field[0] >= '1' && (!waf || field[0] > waf) && (document.cookie = 'waf=' + field[0] + '; Path=/', location.replace(location.href)); // Update security field (OXXXXXXXXX)
 		for (let i = 1; field && i < 10; i++) field[i] === '1' && RHYTHM.HUM?.[i](this); // Update personalization field (XOOOOOOOOO)
 		if (this.data.clicks % RHYTHM.TAP === 0 || this.force) { // After first request, abort others to save bandwidth
@@ -274,7 +274,7 @@ class Rhythm {
 			fetch(location.origin + (RHYTHM.HIT === '/' ? '' : RHYTHM.HIT) + '/?livestreaming', // Session activation and cookie resonance path (default: '/rhythm')
 				{method: 'HEAD', signal: ctrl.signal, credentials: 'include', redirect: 'manual', keepalive: true}).catch(() => {}); // Abort+keepalive trick fires and forgets with guaranteed delivery
 			if (this.data.clicks > RHYTHM.TAP && !this.force) setTimeout(() => ctrl.abort(), RHYTHM.THR); // Session refresh cycle (default: 3 clicks)
-			this.force = false;
+			this.force && this.force--;
 		}
 	}
 	clean() { // Remove echo=2 completed sessions
