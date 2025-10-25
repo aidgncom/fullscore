@@ -38,7 +38,6 @@ function tempo(rhythm) { // Tap Event Method Performance Optimizer
 			let el = document.elementFromPoint(e.changedTouches[0].clientX, e.changedTouches[0].clientY); // Get target at touch point
 			const label = el?.closest('label');
 			el = label?.control || label?.querySelector('input,textarea,select,button') || el; // Get real target from label
-			while (el && el.namespaceURI === 'http://www.w3.org/2000/svg') el = el.parentElement; // Get real target from SVG
 			rhythm && rhythm.click(el); // Mobile RHYTHM integration
 			if (el) for (let i = 0; i < 8; i++) { // Find clickable parent, max 8 levels
 				if (typeof el.click === "function") {el.click(); break;} // Native click method
@@ -54,7 +53,6 @@ function tempo(rhythm) { // Tap Event Method Performance Optimizer
 			if (used) return; // Skip if already used
 			used = true;
 			let el = e.target.closest('label')?.control || e.target; // Get real target from label
-			while (el && el.namespaceURI === 'http://www.w3.org/2000/svg') el = el.parentElement; // Get real target from SVG
 			rhythm && rhythm.click(el); // desktop RHYTHM integration
 		}, {capture: true});
 	}
