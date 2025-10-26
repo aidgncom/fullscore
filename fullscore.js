@@ -238,12 +238,6 @@ class Rhythm {
 		document.addEventListener('visibilitychange', () => { // RHYTHM engine stop
 			const ses = this.get(window.name); // Track all tabs to detect real browser close
 			if (document.visibilityState === 'hidden') {
-				if (RHYTHM.DEL > 0) for (let i = 1; i <= RHYTHM.MAX; i++) { // Session deletion threshold (default: 1 clicks)
-					const name = 'rhythm_' + i, s = this.get(name);
-					const del = s && +(s.split('_', 7)[6] || 0) < RHYTHM.DEL;
-					if (del) document.cookie = name + '=; Max-Age=0; Path=/';
-					if (del && name === window.name) this.data = null, this.beat = null, window.name = '';
-				}
 				if (RHYTHM.ADD.POW) return this.batch(); // Power Mode for immediate batch
 				/mobi|android|tablet|ipad|iphone/i.test(navigator.userAgent) && ses && ses[0] === '0' && (document.cookie = window.name + '=1' + ses.slice(1) + this.tail); // Mark as echo=1 immediately on mobile
 				setTimeout(() => !/rhythm_\d+=0/.test(document.cookie) && this.blur && this.batch(), 1); // Batch if no active sessions
@@ -290,14 +284,18 @@ class Rhythm {
 		if (cookies) {
 			const updates = []; // Gather echo data
 			for (let i = 0; i < cookies.length; i++) {
-				const updated = cookies[i].replace(/=./, '=2'); // Mark as echo=2
+				const c = cookies[i];
+				if (+(c.split('_')[6] || 0) < RHYTHM.DEL) { document.cookie = c.split('=')[0] + '=; Max-Age=0; Path=/'; continue; }  // Session deletion threshold (default: 1 clicks)
+				const updated = c.replace(/=./, '=2'); // Mark as echo=2
 				document.cookie = updated + this.tail;
 				updates.push(updated);
 			}
-			const data = updates.join('');
-			for (const echo of RHYTHM.ECO) { // Session endpoint and batch signal (default: '/rhythm/echo')
-				const url = echo[0] === 'h' ? echo : location.origin + echo;
-				navigator.sendBeacon(url, data) || fetch(url, {method: 'POST', body: data, keepalive: true}).catch(() => {}); // Send with fallback
+			if (updates.length) {
+				const data = updates.join('');
+				for (const echo of RHYTHM.ECO) { // Session endpoint and batch signal (default: '/rhythm/echo')
+					const url = echo[0] === 'h' ? echo : location.origin + echo;
+					navigator.sendBeacon(url, data) || fetch(url, {method: 'POST', body: data, keepalive: true}).catch(() => {}); // Send with fallback
+				}
 			}
 		}
 		this.clean();
