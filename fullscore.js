@@ -211,18 +211,16 @@ class Rhythm {
 		this.hasBeat = typeof Beat !== 'undefined';
 		this.hasTempo = typeof tempo !== 'undefined';
 		this.tail = '; Path=/; Max-Age=' + RHYTHM.AGE + '; SameSite=Lax' + (location.protocol === 'https:' ? '; Secure' : ''); // Session retention period (default: 3 days)
+		const newScore = () => {
+			let key = '';
+			for (let i = 0; i < RHYTHM.KEY; i++) key += '0123456789abcdefghijklmnopqrstuvwxyz'[Math.random() * 36 | 0];
+			document.cookie = 'score=0000000000_' + Math.floor(Date.now() / RHYTHM.TIC) + '_' + key + '___; Path=/; SameSite=Lax' + (location.protocol === 'https:' ? '; Secure' : '');
+		};
 		if (!this.get('score')) { // Browser session orchestrator
 			this.clean(); // Remove echo=2 completed sessions
 			this.batch(); // Batch sessions to edge or custom endpoints
-			let key = '';
-			for (let i = 0; i < RHYTHM.KEY; i++) key += '0123456789abcdefghijklmnopqrstuvwxyz'[Math.random() * 36 | 0];
-			const time = Math.floor(Date.now() / RHYTHM.TIC); // Tick (default: 100ms)
-			document.cookie = 'score=0000000000_' + time + '_' + key + '___; Path=/; SameSite=Lax' + (location.protocol === 'https:' ? '; Secure' : '');
+			newScore();
 		} // Score fields modified by edge worker analyzing BEAT patterns to identify bot vs human behaviors ([0] bot security level, [1-9] human behavior flags)
-		this.score = this.get('score'); // Store current score
-		const parts = this.score.split('_');
-		this.time = +parts[1];
-		this.key = parts[2];
 		this.session(); // Session management
 		this.hasTempo ? tempo(this) : document.addEventListener('click', e => this.click(e.target), {capture: true}); // Tempo integration
 		this.scrolling = false; // Debounce to count once per scroll gesture
@@ -241,7 +239,10 @@ class Rhythm {
 				if (RHYTHM.ADD.POW) return this.batch(); // Power Mode for immediate batch
 				/mobi|android|tablet|ipad|iphone/i.test(navigator.userAgent) && ses && ses[0] === '0' && (document.cookie = window.name + '=1' + ses.slice(1) + this.tail); // Mark as echo=1 immediately on mobile
 				setTimeout(() => !/rhythm_\d+=0/.test(document.cookie) && this.blur && this.batch(true), 1); // Batch if no active sessions
-			} else ses && ses[0] === '1' && (document.cookie = window.name + '=0' + ses.slice(1) + this.tail);
+			} else {
+				ses && ses[0] === '1' && (document.cookie = window.name + '=0' + ses.slice(1) + this.tail);
+				!this.get('score') && (newScore(), this.session(true));
+			}
 		}); // setTimeout isn't just for delay, Browsers can process short macrotasks after pagehide event
 		if (!RHYTHM.ADD.POW) {
 			const mark = () => {const ses = this.get(window.name); ses && ses[0] === '0' && (document.cookie = window.name + '=1' + ses.slice(1) + this.tail);}; // Mark as echo=1 on hide
@@ -253,30 +254,8 @@ class Rhythm {
 		const c = '; ' + document.cookie + ';', i = c.indexOf('; ' + g + '=');
 		return i < 0 ? null : c.slice(i + g.length + 3, c.indexOf(';', i + g.length + 3));
 	}
-	click(el) { // Click action and cookie refresh
-		this.data || this.session();
-		this.data.clicks++;
-		if (this.hasBeat) this.beat.element(el);
-		this.save();
-		const score = this.get('score'); // Bot Detection and Human Personalization
-		const field = score?.split('_')[0], waf = this.get('waf'), prevField = this.score?.split('_')[0];
-		field && field !== prevField && (this.score = score, this.force = RHYTHM.TAP); // Skip abort for next RHYTHM.TAP fetches when score field changes
-		const current = field?.[0], previous = prevField?.[0]; // Compare security level changes
-		current && current >= '1' && (!waf || current > waf) && current !== previous && (document.cookie = 'waf=' + current + '; Path=/', setTimeout(() => location.reload(), 1)); // Update security field (OXXXXXXXXX)
-		for (let i = 1; field && i < 10; i++) field[i] === '1' && RHYTHM.HUM?.[i](this); // Update personalization field (XOOOOOOOOO)
-		if (this.data.clicks % RHYTHM.TAP === 0 || this.force) { // After first request, abort others to save bandwidth
-			const ctrl = new AbortController();
-			fetch(location.origin + (RHYTHM.HIT === '/' ? '' : RHYTHM.HIT) + '/?livestreaming', // Session activation and cookie resonance path (default: '/rhythm')
-				{method: 'HEAD', signal: ctrl.signal, credentials: 'include', redirect: 'manual', keepalive: true}).catch(() => {}); // Abort+keepalive trick fires and forgets with guaranteed delivery
-			if (this.data.clicks > RHYTHM.TAP && !this.force) setTimeout(() => ctrl.abort(), 100); // Session refresh cycle (default: 3 clicks) - increased from 1ms to 100ms
-			this.force && this.force--;
-		}
-	}
 	clean() { // Remove echo=2 completed sessions
-		for (let i = 1; i <= RHYTHM.MAX; i++) {
-			const name = 'rhythm_' + i;
-			if (this.get(name)?.[0] === '2') document.cookie = name + '=; Max-Age=0; Path=/';
-		}
+		for (let i = 1, n; i <= RHYTHM.MAX; i++) (n = 'rhythm_' + i, this.get(n)?.[0] === '2' && (document.cookie = n + '=; Max-Age=0; Path=/'));
 		this.data = null, this.beat = null, window.name = '';
 	}
 	batch(force = false) { // Batch sessions to edge or custom endpoints
@@ -289,7 +268,7 @@ class Rhythm {
 			document.cookie = updated + this.tail;
 			updates.push(updated);
 		}
-		if (force) document.cookie = 'score=0000000000' + this.get('score').substring(10) + '; Path=/; SameSite=Lax' + (location.protocol === 'https:' ? '; Secure' : '');
+		if (force) document.cookie = 'score=; Max-Age=0; Path=/; SameSite=Lax' + (location.protocol === 'https:' ? '; Secure' : '');
 		if (updates.length) {
 			const data = updates.join('');
 			this.data = null, this.beat = null, window.name = '';
@@ -301,6 +280,10 @@ class Rhythm {
 		this.clean();
 	}
 	session(force = false) { // Session management
+		this.score = this.get('score'); // Store current score
+		const parts = this.score.split('_');
+		this.time = +parts[1];
+		this.key = parts[2];
 		if (!force) {
 			if (window.name.startsWith('rhythm_')) { // Page restoration using window.name
 				const ses = this.get(window.name);
@@ -325,7 +308,8 @@ class Rhythm {
 			this.batch(); 
 			this.data = null; // Cookie-based leader election without coordination overhead
 			const newTime = Math.floor(Date.now() / RHYTHM.TIC);
-			document.cookie = 'score=' + this.score.split('_')[0] + '_' + newTime + '_' + this.key + '___; Path=/; SameSite=Lax' + (location.protocol === 'https:' ? '; Secure' : ''); // New score signal
+			this.score = this.score.split('_')[0] + '_' + newTime + '_' + this.key + '___'; // New score signal
+			document.cookie = 'score=' + this.score + '; Path=/; SameSite=Lax' + (location.protocol === 'https:' ? '; Secure' : '');
 			this.time = newTime;
 			name = 'rhythm_1';
 		}
@@ -370,6 +354,25 @@ class Rhythm {
 		if (save.length > RHYTHM.CAP) { // Maximum session capacity (default: 3500 bytes)
 			document.cookie = this.data.name + '=' + ('1' + save.slice(1)) + this.tail; // Mark as echo=1
 			this.session(true); // Rotate session if capacity exceeded
+		}
+	}
+	click(el) { // Click action and cookie refresh
+		this.data || this.session();
+		this.data.clicks++;
+		if (this.hasBeat) this.beat.element(el);
+		this.save();
+		const score = this.get('score'); // Bot Detection and Human Personalization
+		const field = score?.split('_')[0], waf = this.get('waf'), prevField = this.score?.split('_')[0];
+		field && field !== prevField && (this.score = score, this.force = RHYTHM.TAP); // Skip abort for next RHYTHM.TAP fetches when score field changes
+		const current = field?.[0], previous = prevField?.[0]; // Compare security level changes
+		current && current >= '1' && (!waf || current > waf) && current !== previous && (document.cookie = 'waf=' + current + '; Path=/', setTimeout(() => location.reload(), 1)); // Update security field (OXXXXXXXXX)
+		for (let i = 1; field && i < 10; i++) field[i] === '1' && RHYTHM.HUM?.[i](this); // Update personalization field (XOOOOOOOOO)
+		if (this.data.clicks % RHYTHM.TAP === 0 || this.force) { // After first request, abort others to save bandwidth
+			const ctrl = new AbortController();
+			fetch(location.origin + (RHYTHM.HIT === '/' ? '' : RHYTHM.HIT) + '/?livestreaming', // Session activation and cookie resonance path (default: '/rhythm')
+				{method: 'HEAD', signal: ctrl.signal, credentials: 'include', redirect: 'manual', keepalive: true}).catch(() => {}); // Abort+keepalive trick fires and forgets with guaranteed delivery
+			if (this.data.clicks > RHYTHM.TAP && !this.force) setTimeout(() => ctrl.abort(), 100); // Session refresh cycle (default: 3 clicks) - increased from 1ms to 100ms
+			this.force && this.force--;
 		}
 	}
 	spa() { // Single Page Application addon (default: false)
