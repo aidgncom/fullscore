@@ -240,13 +240,13 @@ class Rhythm {
 			if (document.visibilityState === 'hidden') {
 				if (RHYTHM.ADD.POW) return this.batch(); // Power Mode for immediate batch
 				/mobi|android|tablet|ipad|iphone/i.test(navigator.userAgent) && ses && ses[0] === '0' && (document.cookie = window.name + '=1' + ses.slice(1) + this.tail); // Mark as echo=1 immediately on mobile
-				setTimeout(() => !/rhythm_\d+=0/.test(document.cookie) && this.blur && this.batch(), 1); // Batch if no active sessions
+				setTimeout(() => !/rhythm_\d+=0/.test(document.cookie) && this.blur && this.batch(true), 1); // Batch if no active sessions
 			} else ses && ses[0] === '1' && (document.cookie = window.name + '=0' + ses.slice(1) + this.tail);
 		}); // setTimeout isn't just for delay, Browsers can process short macrotasks after pagehide event
 		if (!RHYTHM.ADD.POW) {
 			const mark = () => {const ses = this.get(window.name); ses && ses[0] === '0' && (document.cookie = window.name + '=1' + ses.slice(1) + this.tail);}; // Mark as echo=1 on hide
 			window.addEventListener('blur', () => document.visibilityState === 'hidden' && (mark(), this.blur = true, setTimeout(() => this.blur = false, 17)));
-			window.addEventListener('pagehide', e => !e.persisted && (mark(), setTimeout(() => !/rhythm_\d+=0/.test(document.cookie) && this.batch(), 1))); // Batch if no active sessions
+			window.addEventListener('pagehide', e => !e.persisted && (mark(), setTimeout(() => !/rhythm_\d+=0/.test(document.cookie) && this.batch(true), 1))); // Batch if no active sessions
 		}
 	}
 	get(g) { // Get cookie
@@ -279,23 +279,23 @@ class Rhythm {
 		}
 		this.data = null, this.beat = null, window.name = '';
 	}
-	batch() { // Batch sessions to edge or custom endpoints
+	batch(force = false) { // Batch sessions to edge or custom endpoints
 		const cookies = document.cookie.match(/rhythm_\d+=[^;]*/g);
-		if (cookies) {
-			const updates = []; // Gather echo data
-			for (let i = 0; i < cookies.length; i++) {
-				const c = cookies[i];
-				if (+(c.split('_')[6] || 0) < RHYTHM.DEL) { document.cookie = c.split('=')[0] + '=; Max-Age=0; Path=/'; continue; }  // Session deletion threshold (default: 1 clicks)
-				const updated = c.replace(/=./, '=2'); // Mark as echo=2
-				document.cookie = updated + this.tail;
-				updates.push(updated);
-			}
-			if (updates.length) {
-				const data = updates.join('');
-				for (const echo of RHYTHM.ECO) { // Session endpoint and batch signal (default: '/rhythm/echo')
-					const url = echo[0] === 'h' ? echo : location.origin + echo;
-					navigator.sendBeacon(url, data) || fetch(url, {method: 'POST', body: data, keepalive: true}).catch(() => {}); // Send with fallback
-				}
+		const updates = []; // Gather echo data
+		if (cookies) for (let i = 0; i < cookies.length; i++) {
+			const c = cookies[i];
+			if (+(c.split('_')[6] || 0) < RHYTHM.DEL) { document.cookie = c.split('=')[0] + '=; Max-Age=0; Path=/'; continue; } // Session deletion threshold (default: 1 clicks)
+			const updated = c.replace(/=./, '=2'); // Mark as echo=2
+			document.cookie = updated + this.tail;
+			updates.push(updated);
+		}
+		if (force) document.cookie = 'score=0000000000' + this.get('score').substring(10) + '; Path=/; SameSite=Lax' + (location.protocol === 'https:' ? '; Secure' : '');
+		if (updates.length) {
+			const data = updates.join('');
+			this.data = null, this.beat = null, window.name = '';
+			for (const echo of RHYTHM.ECO) { // Session endpoint and batch signal (default: '/rhythm/echo')
+				const url = echo[0] === 'h' ? echo : location.origin + echo;
+				navigator.sendBeacon(url, data) || fetch(url, {method: 'POST', body: data, keepalive: true}).catch(() => {}); // Send with fallback
 			}
 		}
 		this.clean();
