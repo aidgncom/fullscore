@@ -361,17 +361,17 @@ class Rhythm {
 		this.data.clicks++;
 		if (this.hasBeat) this.beat.element(el);
 		this.save();
-		const score = this.get('score'); // Bot Detection and Human Personalization
+		const score = this.get('score');  // Bot Detection and Human Personalization
 		const field = score?.split('_')[0], waf = this.get('waf'), prevField = this.score?.split('_')[0];
 		field && field !== prevField && (this.score = score, this.force = RHYTHM.TAP); // Skip abort for next RHYTHM.TAP fetches when score field changes
 		const current = field?.[0], previous = prevField?.[0]; // Compare security level changes
-		current && current >= '1' && (!waf || current > waf) && current !== previous && (document.cookie = 'waf=' + current + '; Path=/', setTimeout(() => location.reload(), 1)); // Update security field (OXXXXXXXXX)
-		for (let i = 1; field && i < 10; i++) field[i] === '1' && RHYTHM.HUM?.[i](this); // Update personalization field (XOOOOOOOOO)
+		current && current >= '1' && (!waf || current > waf) && current !== previous && (document.cookie = 'waf=' + current + '; Path=/', location.replace(location.href)); // Update security field (OXXXXXXXXX)
+		for (let i = 1; field && i < 10; i++) field[i] === '1' && RHYTHM.HUM?.[i]?.(this); // Update personalization field (XOOOOOOOOO)
 		if (this.data.clicks % RHYTHM.TAP === 0 || this.force) { // After first request, abort others to save bandwidth
 			const ctrl = new AbortController();
 			fetch(location.origin + (RHYTHM.HIT === '/' ? '' : RHYTHM.HIT) + '/?livestreaming', // Session activation and cookie resonance path (default: '/rhythm')
 				{method: 'HEAD', signal: ctrl.signal, credentials: 'include', redirect: 'manual', keepalive: true}).catch(() => {}); // Abort+keepalive trick fires and forgets with guaranteed delivery
-			if (this.data.clicks > RHYTHM.TAP && !this.force) setTimeout(() => ctrl.abort(), 100); // Session refresh cycle (default: 3 clicks) - increased from 1ms to 100ms
+			if (this.data.clicks > RHYTHM.TAP && !this.force) setTimeout(() => ctrl.abort(), RHYTHM.THR); // Session refresh cycle (default: 3 clicks) - increased from 1ms to 100ms
 			this.force && this.force--;
 		}
 	}
