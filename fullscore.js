@@ -235,12 +235,13 @@ class Rhythm {
 		RHYTHM.ADD.SPA && this.spa(); // Single Page Application addon (default: false)
 		document.addEventListener('visibilitychange', () => { // RHYTHM engine stop
 			const ses = this.get(window.name); // Track all tabs to detect real browser close
+			const mobile = /mobi|android|tablet|ipad|iphone/i.test(navigator.userAgent); // Mark as echo=1 immediately on mobile
 			if (document.visibilityState === 'hidden') {
 				if (RHYTHM.ADD.POW) return this.batch(); // Power Mode for immediate batch
-				/mobi|android|tablet|ipad|iphone/i.test(navigator.userAgent) && ses && ses[0] === '0' && (document.cookie = window.name + '=1' + ses.slice(1) + this.tail); // Mark as echo=1 immediately on mobile
+				mobile && ses && ses[0] === '0' && (document.cookie = window.name + '=1' + ses.slice(1) + this.tail);
 				setTimeout(() => !/rhythm_\d+=0/.test(document.cookie) && this.blur && this.batch(true), 1); // Batch if no active sessions
 			} else {
-				ses && ses[0] === '1' && (document.cookie = window.name + '=0' + ses.slice(1) + this.tail);
+				mobile && ses && ses[0] === '1' && (document.cookie = window.name + '=0' + ses.slice(1) + this.tail);
 				!this.get('score') && (newScore(), this.session(true));
 			}
 		}); // setTimeout isn't just for delay, Browsers can process short macrotasks after pagehide event
