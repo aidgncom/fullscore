@@ -402,4 +402,3 @@ RHYTHM.HUM = { // Works with Edge Runner humanPattern() detection.
 	}
 };
 document.addEventListener('DOMContentLoaded', () => new Rhythm()); // Cue the performance
-
