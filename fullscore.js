@@ -361,7 +361,7 @@ class Rhythm {
 		this.data.clicks++;
 		if (this.hasBeat) this.beat.element(el);
 		this.save();
-		const score = this.get('score');  // Bot Detection and Human Personalization
+		const score = this.get('score'); // Bot Detection and Human Personalization
 		const field = score?.split('_')[0], waf = this.get('waf'), prevField = this.score?.split('_')[0];
 		field && field !== prevField && (this.score = score, this.force = RHYTHM.TAP); // Skip abort for next RHYTHM.TAP fetches when score field changes
 		const current = field?.[0], previous = prevField?.[0]; // Compare security level changes
