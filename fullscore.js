@@ -211,7 +211,7 @@ class Rhythm {
 		this.hasBeat = typeof Beat !== 'undefined';
 		this.hasTempo = typeof tempo !== 'undefined';
 		this.tail = '; Path=/; Max-Age=' + RHYTHM.AGE + '; SameSite=Lax' + (location.protocol === 'https:' ? '; Secure' : ''); // Session retention period (default: 3 days)
-		const newScore = () => {
+		const newScore = () => { // Compose new score
 			let key = '';
 			for (let i = 0; i < RHYTHM.KEY; i++) key += '0123456789abcdefghijklmnopqrstuvwxyz'[Math.random() * 36 | 0];
 			document.cookie = 'score=0000000000_' + Math.floor(Date.now() / RHYTHM.TIC) + '_' + key + '___; Path=/; SameSite=Lax' + (location.protocol === 'https:' ? '; Secure' : '');
@@ -402,3 +402,4 @@ RHYTHM.HUM = { // Works with Edge Runner humanPattern() detection.
 	}
 };
 document.addEventListener('DOMContentLoaded', () => new Rhythm()); // Cue the performance
+
