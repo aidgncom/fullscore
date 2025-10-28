@@ -30,6 +30,7 @@ Full Score: Browser ~ Edge → Archive
 // ✅ 2 Steps, $50 – $500/month
 // No API endpoints needed
 // No Queue & Processing needed
+// No Origin access required
 ```
 
 I've tried to keep the technical explanations from being too dry, but if you find yourself losing steam, feel free to skip to the Fifth Movement to see how everything comes together.
