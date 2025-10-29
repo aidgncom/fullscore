@@ -235,7 +235,7 @@ class Rhythm {
 		RHYTHM.ADD.SPA && this.spa(); // Single Page Application addon (default: false)
 		document.addEventListener('visibilitychange', () => { // RHYTHM engine stop
 			const ses = this.get(window.name); // Track all tabs to detect real browser close
-			const mobile = /mobi|android|tablet|ipad|iphone/i.test(navigator.userAgent); // Mark as echo=1 immediately on mobile
+			const mobile = /mobi|android|tablet|ipad|iphone/i.test(navigator.userAgent); // Mark as echo=1/0 immediately on mobile
 			if (document.visibilityState === 'hidden') {
 				if (RHYTHM.ADD.POW) return this.batch(); // Power Mode for immediate batch
 				mobile && ses && ses[0] === '0' && (document.cookie = window.name + '=1' + ses.slice(1) + this.tail);
@@ -327,10 +327,12 @@ class Rhythm {
 	}
 	save() { // Save session data to cookie
 		const current = this.get('score') || this.score;
-		if (+current.split('_', 2)[1] !== +this.score.split('_', 2)[1]) { // Score change detection
+		if (!this.block && +current.split('_', 2)[1] !== +this.score.split('_', 2)[1]) { // Score change detection
+			this.block = true;
 			this.score = current;
 			this.data = null; // Follow the new time signal from leader
 			this.session(true);
+			this.block = false;
 			return; // Restart with fresh session
 		}
 		const number = window.name.slice(7);
