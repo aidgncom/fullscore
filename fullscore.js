@@ -161,6 +161,18 @@ class Beat {
 			this.tick = now;
 		}
 	}
+	fold(f) { // Fold repetitive elements
+		const len = this.notes.length;
+		if (len > 1 && this.notes[len - 1].startsWith(BEAT.TOK.T)) { // Time-based fold
+			const t = this.notes[len - 1].substring(1), prev = this.notes[len - 2];
+			if (prev.endsWith(f)) {
+				this.notes[len - 2] = prev.substring(0, prev.length - f.length) + BEAT.TOK.A + t + f;
+				this.notes.pop(); // Remove time token
+				return;
+			}
+		}
+		this.notes.push(f);
+	}
 	page(p) { // Generate and record page hash
 		this.time();
 		if (this.maps.pages[p]) return this.notes.push(BEAT.TOK.P + this.maps.pages[p]); // Pre-mapped pages applied immediately
@@ -173,18 +185,6 @@ class Beat {
 		while (this.table[token] && this.table[token] !== p) dots += BEAT.TOK.L, token = BEAT.TOK.P + dots + result;
 		this.table[token] = p;
 		this.notes.push(token);
-	}
-	fold(f) { // Fold repetitive elements
-		const len = this.notes.length;
-		if (len > 1 && this.notes[len - 1].startsWith(BEAT.TOK.T)) { // Time-based fold
-			const t = this.notes[len - 1].substring(1), prev = this.notes[len - 2];
-			if (prev.endsWith(f)) {
-				this.notes[len - 2] = prev.substring(0, prev.length - f.length) + BEAT.TOK.A + t + f;
-				this.notes.pop(); // Remove time token
-				return;
-			}
-		}
-		this.notes.push(f);
 	}
 	element(e) { // Record element clicks as a linear DOM depth string
 		if (!e || e.nodeType === 3 && !(e = e.parentElement)) return;
