@@ -241,9 +241,9 @@ class Rhythm {
 				mobile && ses && ses[0] === '0' && (document.cookie = window.name + '=1' + ses.slice(1) + this.tail);
 				setTimeout(() => !/rhythm_\d+=0/.test(document.cookie) && this.blur && this.batch(true), 1); // Batch if no active sessions
 			} else {
-				this.hasBeat && (this.beat.tick = Date.now()); // Reset BEAT timer when visible
 				mobile && ses && ses[0] === '1' && (document.cookie = window.name + '=0' + ses.slice(1) + this.tail);
 				!this.get('score') && (newScore(), this.session(true));
+				this.hasBeat && (this.beat.tick = Date.now()); // Reset BEAT timer when visible
 			}
 		}); // setTimeout isn't just for delay, Browsers can process short macrotasks after pagehide event
 		if (!RHYTHM.ADD.POW) {
