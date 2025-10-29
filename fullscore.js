@@ -228,7 +228,7 @@ class Rhythm {
 			this.data || this.session();
 			if (!this.scrolling) this.scrolling = true, this.data.scrolls++, this.save(); // Count and save immediately
 			clearTimeout(this.s), this.s = setTimeout(() => {
-				this.hasBeat && RHYTHM.ADD.SCR && (this.beat.time(), this.beat.notes.push('^' + Math.round(window.scrollY))); // Record final scroll position
+				if (this.hasBeat && RHYTHM.ADD.SCR) this.beat.time(), this.beat.notes.push('^' + Math.round(window.scrollY)); // Record final scroll position
 				this.scrolling = false;
 			}, 150); // Reset after 150ms
 		}, {capture: true, passive: true});
@@ -243,7 +243,7 @@ class Rhythm {
 			} else {
 				mobile && ses && ses[0] === '1' && (document.cookie = window.name + '=0' + ses.slice(1) + this.tail);
 				!this.get('score') && (newScore(), this.session(true));
-				this.hasBeat && (this.beat.tick = Date.now()); // Reset BEAT timer when visible
+				if (this.hasBeat) this.beat.tick = Date.now(); // Reset BEAT timer when visible
 			}
 		}); // setTimeout isn't just for delay, Browsers can process short macrotasks after pagehide event
 		if (!RHYTHM.ADD.POW) {
@@ -286,22 +286,20 @@ class Rhythm {
 		const parts = this.score.split('_');
 		this.time = +parts[1];
 		this.key = parts[2];
-		if (!force) {
-			if (window.name.startsWith('rhythm_')) { // Page restoration using window.name
-				const ses = this.get(window.name);
-				if (ses) { // Restore existing session
-					const parts = ses.split('_');
-					const flow = parts.slice(8).join('_'); // Extract BEAT flow from session
-					this.data = {name: window.name, time: +parts[1], key: parts[2], device: +parts[3], referrer: +parts[4], scrolls: +parts[5], clicks: +parts[6]}; // Convert string to object
-					if (this.hasBeat) {
-						this.beat = new Beat();
-						if (flow) this.beat.notes = [flow], this.beat.tick = Date.now(); // Initialize timing
-						this.beat.page(location.pathname); // Add current page to BEAT
-					}
-					return this.save(); // Save updated session
+		if (!force && window.name.startsWith('rhythm_')) { // Page restoration using window.name
+			const ses = this.get(window.name);
+			if (ses) { // Restore existing session
+				const parts = ses.split('_');
+				const flow = parts.slice(8).join('_'); // Extract BEAT flow from session
+				this.data = {name: window.name, time: +parts[1], key: parts[2], device: +parts[3], referrer: +parts[4], scrolls: +parts[5], clicks: +parts[6]}; // Convert string to object
+				if (this.hasBeat) {
+					this.beat = new Beat();
+					if (flow) this.beat.notes = [flow], this.beat.tick = Date.now(); // Initialize timing
+					this.beat.page(location.pathname); // Add current page to BEAT
 				}
-				window.name = ''; // Clear invalid session
+				return this.save(); // Save updated session
 			}
+			window.name = ''; // Clear invalid session
 		}
 		let name = null; // Available session slot finder
 		for (let i = 1; i <= RHYTHM.MAX; i++) // Maximum session count (default: 7)
@@ -323,16 +321,14 @@ class Rhythm {
 		if (index === 2 && domain) for (const key in RHYTHM.REF) if (domain === key || domain.endsWith('.' + key)) { index = RHYTHM.REF[key]; break; } // Referrer mapping (0=direct, 1=internal, 2=unknown, 3-255=specific domains)
 		this.data = {name: name, time: this.time, key: this.key, device: /ipad|tablet|silk/i.test(ua) || /android/i.test(ua) && !/mobi/i.test(ua) ? 2 : /mobi|iphone/i.test(ua) ? 1 : 0, referrer: index, scrolls: 0, clicks: 0}; // Create new session
 		if (this.hasBeat) this.beat = new Beat(), this.beat.page(location.pathname); // Create new BEAT instance
-		this.save();
+		this.save(true);
 	}
-	save() { // Save session data to cookie
+	save(force = false) { // Save session data to cookie
 		const current = this.get('score') || this.score;
-		if (!this.block && +current.split('_', 2)[1] !== +this.score.split('_', 2)[1]) { // Score change detection
-			this.block = true;
+		if (!force && +current.split('_', 2)[1] !== +this.score.split('_', 2)[1]) { // Score change detection
 			this.score = current;
 			this.data = null; // Follow the new time signal from leader
 			this.session(true);
-			this.block = false;
 			return; // Restart with fresh session
 		}
 		const number = window.name.slice(7);
