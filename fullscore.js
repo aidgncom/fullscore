@@ -86,16 +86,6 @@ const RHYTHM = { // Real-time Hybrid Traffic History Monitor
 		TAB: true,		// BEAT Cross-tab tracking addon (default: true)
 		SCR: false,		// BEAT Scroll position tracking addon (default: false)
 		SPA: false,		// Single Page Application addon (default: false)
-		POW: false,		// Power Mode for immediate batch on visibility change (default: false)
-						// To explain the default mode POW=false first,
-						// Full Score resonates the complete browsing journey including cross-tab only once.
-						// However, due to browser pagehide event characteristics, transmission may be delayed or lost.
-						// Delayed data will be re-batched and resonated when the user visits the website next time.
-						// Consider Power Mode when total data volume matters more than journey completeness.
-						// When setting POW=true, immediate batch triggers even on tab switches or app changes.
-						// Unfortunately, immediate batch nature prevents cross-tab journey recording, so the feature is disabled.
-						// However, these fragmented batches are all bound by the same time and key,
-						// allowing the entire journey to be reconstructed into a single flow by considering batch order.
 	},
 };
 
@@ -237,7 +227,6 @@ class Rhythm {
 			const ses = this.get(window.name); // Track all tabs to detect real browser close
 			const mobile = /mobi|android|tablet|ipad|iphone/i.test(navigator.userAgent); // Mark as echo=1/0 immediately on mobile
 			if (document.visibilityState === 'hidden') {
-				if (RHYTHM.ADD.POW) return this.batch(); // Power Mode for immediate batch
 				mobile && ses && ses[0] === '0' && (document.cookie = window.name + '=1' + ses.slice(1) + this.tail);
 				setTimeout(() => !/rhythm_\d+=0/.test(document.cookie) && this.blur && this.batch(true), 1); // Batch if no active sessions
 			} else {
@@ -246,11 +235,9 @@ class Rhythm {
 				if (this.hasBeat) this.beat.tick = Date.now(); // Reset BEAT timer when visible
 			}
 		}); // setTimeout isn't just for delay, Browsers can process short macrotasks after pagehide event
-		if (!RHYTHM.ADD.POW) {
-			const mark = () => {const ses = this.get(window.name); ses && ses[0] === '0' && (document.cookie = window.name + '=1' + ses.slice(1) + this.tail);}; // Mark as echo=1 on hide
-			window.addEventListener('blur', () => document.visibilityState === 'hidden' && (mark(), this.blur = true, setTimeout(() => this.blur = false, 17)));
-			window.addEventListener('pagehide', e => !e.persisted && (mark(), setTimeout(() => !/rhythm_\d+=0/.test(document.cookie) && this.batch(true), 1))); // Batch if no active sessions
-		}
+		const mark = () => {const ses = this.get(window.name); ses && ses[0] === '0' && (document.cookie = window.name + '=1' + ses.slice(1) + this.tail);}; // Mark as echo=1 on hide
+		window.addEventListener('blur', () => document.visibilityState === 'hidden' && (mark(), this.blur = true, setTimeout(() => this.blur = false, 17)));
+		window.addEventListener('pagehide', e => !e.persisted && (mark(), setTimeout(() => !/rhythm_\d+=0/.test(document.cookie) && this.batch(true), 1))); // Batch if no active sessions
 	}
 	get(g) { // Get cookie
 		const c = '; ' + document.cookie + ';', i = c.indexOf('; ' + g + '=');
@@ -273,7 +260,6 @@ class Rhythm {
 		if (force) document.cookie = 'score=; Max-Age=0; Path=/; SameSite=Lax' + (location.protocol === 'https:' ? '; Secure' : '');
 		if (updates.length) {
 			const data = updates.join('');
-			this.data = null, this.beat = null, window.name = '';
 			for (const echo of RHYTHM.ECO) { // Session endpoint and batch signal (default: '/rhythm/echo')
 				const url = echo[0] === 'h' ? echo : location.origin + echo;
 				navigator.sendBeacon(url, data) || fetch(url, {method: 'POST', body: data, keepalive: true}).catch(() => {}); // Send with fallback
@@ -336,7 +322,7 @@ class Rhythm {
 		const tabs = parts[1] || '';
 		if (!tabs.endsWith('~' + number) && tabs !== number) { // RHYTHM Cross-tab tracking
 			document.cookie = 'score=' + parts[0] + '___' + (tabs ? tabs + '~' : '') + number + '; Path=/; SameSite=Lax' + (location.protocol === 'https:' ? '; Secure' : '');
-			if (this.hasBeat && RHYTHM.ADD.TAB && !RHYTHM.ADD.POW) { // BEAT Cross-tab tracking addon (default: true)
+			if (this.hasBeat && RHYTHM.ADD.TAB) { // BEAT Cross-tab tracking addon (default: true)
 				const before = tabs.split('~').pop();
 				if (before && before !== number) {
 					const ses = this.get('rhythm_' + before); // Mark tab switch in previous session
@@ -344,7 +330,7 @@ class Rhythm {
 				}
 			}
 		}
-		if (this.hasBeat && RHYTHM.ADD.TAB && !RHYTHM.ADD.POW) { // BEAT Cross-tab tracking addon (default: true)
+		if (this.hasBeat && RHYTHM.ADD.TAB) { // BEAT Cross-tab tracking addon (default: true)
 			const ses = this.get(window.name);
 			if (ses) { const flow = ses.split('_').slice(8).join('_');
 				if (flow.match(/___\d+$/)) { const mem = this.beat.flow(); let i = 0; while (flow[i] === mem[i]) i++; // Tab switch marker detected
