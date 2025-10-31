@@ -231,7 +231,7 @@ class Rhythm {
 			this.data || this.session();
 			if (!this.scrolling) this.scrolling = true, this.data.scrolls++, this.save(); // Count and save immediately
 			clearTimeout(this.s), this.s = setTimeout(() => {
-				if (this.hasBeat && RHYTHM.ADD.SCR) this.beat.time(), this.beat.notes.push('^' + Math.round(window.scrollY)); // Record final scroll position
+				if (RHYTHM.ADD.SCR && this.hasBeat) this.beat.time(), this.beat.notes.push('^' + Math.round(window.scrollY)); // Record final scroll position
 				this.scrolling = false;
 			}, 150); // Reset after 150ms
 		}, {capture: true, passive: true});
@@ -240,6 +240,7 @@ class Rhythm {
 			const ses = this.get(window.name); // Track all tabs to detect real browser close
 			const mobile = /mobi|android|tablet|ipad|iphone/i.test(navigator.userAgent); // Mark as echo=1/0 immediately on mobile
 			if (document.visibilityState === 'hidden') {
+				if (RHYTHM.ADD.POW && /rhythm_\d+=/.test(document.cookie)) return this.batch();
 				mobile && ses && ses[0] === '0' && (document.cookie = window.name + '=1' + ses.slice(1) + this.tail);
 				setTimeout(() => !/rhythm_\d+=0/.test(document.cookie) && this.blur && this.batch(true), 1); // Batch if no active sessions
 			} else {
@@ -250,7 +251,7 @@ class Rhythm {
 		}); // setTimeout isn't just for delay, Browsers can process short macrotasks after pagehide event
 		const mark = () => {const ses = this.get(window.name); ses && ses[0] === '0' && (document.cookie = window.name + '=1' + ses.slice(1) + this.tail);}; // Mark as echo=1 on hide
 		window.addEventListener('blur', () => document.visibilityState === 'hidden' && (mark(), this.blur = true, setTimeout(() => this.blur = false, 17)));
-		window.addEventListener('pagehide', e => !e.persisted && (mark(), setTimeout(() => !/rhythm_\d+=0/.test(document.cookie) && this.batch(true), 1))); // Batch if no active sessions
+		window.addEventListener('pagehide', e => !e.persisted && (RHYTHM.ADD.POW ? this.batch(true) : (mark(), setTimeout(() => !/rhythm_\d+=0/.test(document.cookie) && this.batch(true), 1)))); // Batch if no active sessions
 	}
 	get(g) { // Get cookie
 		const c = '; ' + document.cookie + ';', i = c.indexOf('; ' + g + '=');
@@ -261,24 +262,26 @@ class Rhythm {
 		this.data = null, this.beat = null, window.name = '';
 	}
 	batch(force = false) { // Batch sessions to edge or custom endpoints
-		const cookies = document.cookie.match(/rhythm_\d+=[^;]*/g);
-		const updates = []; // Gather echo data
-		if (cookies) for (let i = 0; i < cookies.length; i++) {
-			const c = cookies[i];
-			if (+(c.split('_')[6] || 0) < RHYTHM.DEL) { document.cookie = c.split('=')[0] + '=; Max-Age=0; Path=/'; continue; } // Session deletion threshold (default: 1 clicks)
-			const updated = c.replace(/=./, '=2'); // Mark as echo=2
-			document.cookie = updated + this.tail;
-			updates.push(updated);
-		}
 		if (force) document.cookie = 'score=; Max-Age=0; Path=/; SameSite=Lax' + (location.protocol === 'https:' ? '; Secure' : '');
-		if (updates.length) {
-			const data = updates.join('');
-			for (const echo of RHYTHM.ECO) { // Session endpoint and batch signal (default: '/rhythm/echo')
-				const url = echo[0] === 'h' ? echo : location.origin + echo;
-				navigator.sendBeacon(url, data) || fetch(url, {method: 'POST', body: data, keepalive: true}).catch(() => {}); // Send with fallback
+		const cookies = document.cookie.match(/rhythm_\d+=[^;]*/g);
+		if (cookies) {
+			const updates = []; // Gather echo data
+			for (let i = 0; i < cookies.length; i++) {
+				const updated = cookies[i].replace(/=./, '=2'); // Mark as echo=2
+				const ses = updated.split('=')[0];
+				if (+((this.get(ses) || updated).split('_')[6] || 0) < RHYTHM.DEL) { document.cookie = ses + '=; Max-Age=0; Path=/'; continue; } // Session deletion threshold (default: 1 clicks)
+				document.cookie = updated + this.tail;
+				updates.push(updated);
 			}
+			if (updates.length) {
+				const data = updates.join('');
+				for (const echo of RHYTHM.ECO) { // Session endpoint and batch signal (default: '/rhythm/echo')
+					const url = echo[0] === 'h' ? echo : location.origin + echo;
+					navigator.sendBeacon(url, data) || fetch(url, {method: 'POST', body: data, keepalive: true}).catch(() => {}); // Send with fallback
+				}
+			}
+			this.clean();
 		}
-		this.clean();
 	}
 	session(force = false) { // Session management
 		this.score = this.get('score'); // Store current score
@@ -333,9 +336,9 @@ class Rhythm {
 		const number = window.name.slice(7);
 		const parts = current.split('___');
 		const tabs = parts[1] || '';
-		if (!tabs.endsWith('~' + number) && tabs !== number) { // RHYTHM Cross-tab tracking
+		if (RHYTHM.ADD.TAB && !RHYTHM.ADD.POW && !tabs.endsWith('~' + number) && tabs !== number) { // RHYTHM Cross-tab tracking
 			document.cookie = 'score=' + parts[0] + '___' + (tabs ? tabs + '~' : '') + number + '; Path=/; SameSite=Lax' + (location.protocol === 'https:' ? '; Secure' : '');
-			if (this.hasBeat && RHYTHM.ADD.TAB) { // BEAT Cross-tab tracking addon (default: true)
+			if (this.hasBeat) { // BEAT Cross-tab tracking addon (default: true)
 				const before = tabs.split('~').pop();
 				if (before && before !== number) {
 					const ses = this.get('rhythm_' + before); // Mark tab switch in previous session
@@ -343,11 +346,18 @@ class Rhythm {
 				}
 			}
 		}
-		if (this.hasBeat && RHYTHM.ADD.TAB) { // BEAT Cross-tab tracking addon (default: true)
+		if (RHYTHM.ADD.TAB && !RHYTHM.ADD.POW && this.hasBeat) { // BEAT Cross-tab tracking addon (default: true)
 			const ses = this.get(window.name);
-			if (ses) { const flow = ses.split('_').slice(8).join('_');
-				if (flow.match(/___\d+$/)) { const mem = this.beat.flow(); let i = 0; while (flow[i] === mem[i]) i++; // Tab switch marker detected
-				this.beat.notes = [flow + mem.slice(i).replace(/^\/+/, BEAT.TOK.T)]; } } } // Merge flows
+			if (ses) {
+				const flow = ses.split('_').slice(8).join('_');
+				if (flow.match(/___\d+$/)) {
+					const mem = this.beat.flow();
+					let i = 0;
+					while (flow[i] === mem[i]) i++; // Tab switch marker detected
+					this.beat.notes = [flow + mem.slice(i).replace(/^\/+/, BEAT.TOK.T)]; // Merge flows
+				}
+			}
+		}
 		const save = [0, this.data.time, this.data.key, this.data.device, this.data.referrer, this.data.scrolls, this.data.clicks, Math.floor(Date.now() / RHYTHM.TIC) - this.data.time, this.beat?.flow() || ''].join('_'); // Build session string
 		document.cookie = this.data.name + '=' + save + this.tail;
 		if (save.length > RHYTHM.CAP) { // Maximum session capacity (default: 3500 bytes)
