@@ -28,53 +28,56 @@
  * Will you join the performance?
  */
 
-const BEAT = { 	// Behavioral Event Analytics Transform
-	TIC: 100,	// Tick (default: 100ms)
-	TOK: {		// Token mapping (default: cookie safe)
-				// Compatibility: BEAT is considered compatible even if the symbols
-				// (! # $ % & ' ( ) * + - . / 0-9 : < = > ? @ A-Z [ ] ^ _ ` a-z { | } ~) RFC 6265 cookie-octet or the parser implementation differ,
-				// as long as behavioral data is serialized into sequential format preserving temporal order, spatial context, and action semantics, 
-				// producing an essentially identical semantic stream regardless of storage medium or platform. Any such compatible implementation 
-				// constitutes a derivative work under copyright law and must comply with AGPL-3.0 terms.
-		P: '!',			// Page
-		E: '*',			// Element
-		T: '~',			// Time
-		A: '/',			// Again
-		L: '-',			// Loop
+const BEAT = {		// Behavioral Event Analytics Transform
+	TIC: 100,		// Tick (default: 100ms)
+	TOK: {			// Token mapping (default: cookie safe)
+					// Compatibility: BEAT is considered compatible even if the symbols
+					// (! # $ % & ' ( ) * + - . / 0-9 : < = > ? @ A-Z [ ] ^ _ ` a-z { | } ~) RFC 6265 cookie-octet or the parser implementation differ,
+					// as long as behavioral data is serialized into sequential format preserving temporal order, spatial context, and action semantics, 
+					// producing an essentially identical semantic stream regardless of storage medium or platform. Any such compatible implementation 
+					// constitutes a derivative work under copyright law and must comply with AGPL-3.0 terms.
+		P: '!',				// Page
+		E: '*',				// Element
+		T: '~',				// Time
+		A: '/',				// Again
+		L: '-',				// Loop
 	},
-	MAP: {				// Manual mapping (default: automatic)
-		P: {					// Page URL paths
-			'/': 'home', 		// Homepage reserved word (result: !home)
-			'/english/': 'en', 	// Multilingual path example (result: !en)
+	MAP: {					// Manual mapping (default: automatic)
+		P: {						// Page URL paths
+			'/': 'home', 			// Homepage reserved word (result: !home)
+			'/english/': 'en', 		// Multilingual path example (result: !en)
 		},
-		E: {					// Element id or class selectors
-			'#close-button': 'close',	// Close button example (result: *close)
-			'.open-modal': 'm',			// Modal button example (result: *m)
+		E: {						// Element id or class selectors
+			'#close-button': 'close',		// ID selector example (#id)
+			'.open-modal': 'm',				// Class selector example (.class)
+		    'https://example.com/': 'ex',	// A tag href example (absolute URL)
+		    '/english/': 'en',				// A tag href example (relative URL)
+			'*10div1': 'auto',				// Example of remapping an auto-generated element
 		}
 	}
 };
 
-const RHYTHM = { // Real-time Hybrid Traffic History Monitor
-	HIT: '/rhythm',		// Session activation and cookie resonance path (default: '/rhythm')
-						// Edge observes real-time cookie resonance without endpoints
-						// Edge Worker only monitors this specific path for analytics
-	ECO: [				// Session endpoint and batch signal (default: '/rhythm/echo')
-		'/rhythm/echo',	// Should use same path prefix as HIT for cookie consistency
-						// Sends completion signal only, no need to specify exact endpoint paths
-						// You can replace or add custom endpoints for direct data: 'https://n8n.yoursite.com/webhook/yourcode'
-						// Custom endpoints expose public URLs. Use IP whitelist or reverse proxy for security
+const RHYTHM = {	// Real-time Hybrid Traffic History Monitor
+	HIT: '/rhythm',			// Session activation and cookie resonance path (default: '/rhythm')
+							// Edge observes real-time cookie resonance without endpoints
+							// Edge Worker only monitors this specific path for analytics
+	ECO: [					// Session endpoint and batch signal (default: '/rhythm/echo')
+		'/rhythm/echo',		// Should use same path prefix as HIT for cookie consistency
+							// Sends completion signal only, no need to specify exact endpoint paths
+							// You can replace or add custom endpoints for direct data: 'https://n8n.yoursite.com/webhook/yourcode'
+							// Custom endpoints expose public URLs. Use IP whitelist or reverse proxy for security
 	],
-	TIC: 100,			// Tick (default: 100ms)
-	TAP: 3,				// Session refresh cycle (default: 3 clicks)
-	THR: 1,				// Session refresh throttle (default: 1 ms)
-	KEY: 8,				// Session key length (default: 8 chars)
-	AGE: 259200,		// Session retention period (default: 3 days)
-	MAX: 7,				// Maximum session count (default: 7 slots)
-	CAP: 3500,			// Maximum session capacity (default: 3500 bytes)
-	DEL: 1,				// Session deletion threshold (default: 1 clicks)
-						// 1 means 0-click sessions are deleted before the batch
-						// 0 means all sessions proceed to the batch
-	REF: {				// Referrer mapping (0=direct, 1=internal, 2=unknown, 3-255=specific domains)
+	TIC: 100,				// Tick (default: 100ms)
+	TAP: 3,					// Session refresh cycle (default: 3 clicks)
+	THR: 1,					// Session refresh throttle (default: 1 ms)
+	KEY: 8,					// Session key length (default: 8 chars)
+	AGE: 259200,			// Session retention period (default: 3 days)
+	MAX: 7,					// Maximum session count (default: 7 slots)
+	CAP: 3500,				// Maximum session capacity (default: 3500 bytes)
+	DEL: 1,					// Session deletion threshold (default: 1 clicks)
+							// 1 means 0-click sessions are deleted before the batch
+							// 0 means all sessions proceed to the batch
+	REF: {					// Referrer mapping (0=direct, 1=internal, 2=unknown, 3-255=specific domains)
 		'google.com': 3,
 		'youtube.com': 4,
 		'cloudflare.com': 5,
@@ -82,10 +85,20 @@ const RHYTHM = { // Real-time Hybrid Traffic History Monitor
 		'chatgpt.com': 7,
 		'meta.com': 8,
 	},
-	ADD: { 		// Addon features
-		TAB: true,		// BEAT Cross-tab tracking addon (default: true)
-		SCR: false,		// BEAT Scroll position tracking addon (default: false)
-		SPA: false,		// Single Page Application addon (default: false)
+	ADD: {			// Addon features
+		TAB: true,			// BEAT Cross-tab tracking addon (default: true)
+		SCR: false,			// BEAT Scroll position tracking addon (default: false)
+		SPA: false,			// Single Page Application addon (default: false)
+		POW: false,			// Power Mode for immediate batch on visibility change (default: false)
+							// To explain the default mode POW=false first,
+							// Full Score resonates the complete browsing journey including cross-tab only once.
+							// High accuracy is expected on both mobile and desktop, but some environments may delay or lose data.
+							// Delayed data will be re-batched and resonated when the user visits the website next time.
+							// Consider Power Mode when total data volume matters more than journey completeness.
+							// When setting POW=true, immediate batch triggers even on page refreshes or tab switches.
+							// Unfortunately, immediate batch nature prevents cross-tab journey recording, so the feature is disabled.
+							// However, these fragmented batches are all bound by the same time and key,
+							// allowing the entire journey to be reconstructed into a single flow by considering batch order.
 	},
 };
 
