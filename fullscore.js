@@ -74,7 +74,7 @@ const RHYTHM = {	// Real-time Hybrid Traffic History Monitor
 	AGE: 259200,			// Session retention period (default: 3 days)
 	MAX: 7,					// Maximum session count (default: 7 slots)
 	CAP: 3500,				// Maximum session capacity (default: 3500 bytes)
-	DEL: 1,					// Session deletion threshold (default: 1 clicks)
+	DEL: 1,					// Session deletion threshold (default: 1 click)
 							// 1 means 0-click sessions are deleted before the batch
 							// 0 means all sessions proceed to the batch
 	REF: {					// Referrer mapping (0=direct, 1=internal, 2=unknown, 3-255=specific domains)
