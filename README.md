@@ -333,7 +333,7 @@ if (url.pathname === "/rhythm/echo" && request.method === "POST") {
 
 Edge analyzes every performance in real-time. The (/rhythm/?livestreaming) path monitors cookie resonance through HEAD requests, while (/rhythm/echo) archives completed performances. Bot patterns like MachineGun (rapid clicks), Metronome (exact intervals), or Surface (shallow DOM) trigger security flags. Human patterns activate behavior flags for personalization. If someone hesitates before purchasing, you could show them a coupon.
 
-No API endpoints required. No separate analytics servers or central database queries needed. No Origin access required. Edge listens directly, without calling home. Browser and Edge connect closely in spacetime like sympathetic resonance, fast and vivid. Processing delays are imperceptibly low.
+No API endpoints required. No separate analytics servers or central database queries needed. No Origin access required. The performance completes through the natural resonance between browser and Edge, fast and vivid. Processing delays are imperceptibly low.
 
 A traditional concert hall would be different. Without complex broadcast equipment, without separate studios, street music spreads worldwide.
 
