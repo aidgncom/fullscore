@@ -145,7 +145,7 @@ function tempo(rhythm) { // Tap Event Method Performance Optimizer
 			if (used) return; // Skip if already used
 			used = true;
 			let el = e.target.closest('label')?.control || e.target; // Get real target from label
-			rhythm && rhythm.click(el); // desktop RHYTHM integration
+			rhythm && rhythm.click(el); // Desktop RHYTHM integration
 		}, {capture: true});
 	}
 }
@@ -225,7 +225,7 @@ class Rhythm {
 			newScore();
 		} // Score fields modified by edge worker analyzing BEAT patterns to identify bot vs human behaviors ([0] bot security level, [1-9] human behavior flags)
 		this.session(); // Session management
-		this.hasTempo ? tempo(this) : document.addEventListener('click', e => this.click(e.target), {capture: true}); // Tempo integration
+		this.hasTempo ? tempo(this) : document.addEventListener('click', e => this.click(e.target), {capture: true}); // TEMPO integration
 		this.scrolling = false; // Debounce to count once per scroll gesture
 		document.addEventListener('scroll', () => { // BEAT Scroll position tracking addon (default: false)
 			this.data || this.session();
@@ -356,8 +356,8 @@ class Rhythm {
 				}
 			}
 		}
-		const save = [0, this.data.time, this.data.key, this.data.device, this.data.referrer, this.data.scrolls, this.data.clicks, Math.floor(Date.now() / RHYTHM.TIC) - this.data.time, this.beat?.flow() || ''].join('_'); // Build session string
-		document.cookie = this.data.name + '=' + save + this.tail;
+		const save = [0, this.data.time, this.data.key, this.data.device, this.data.referrer, this.data.scrolls, this.data.clicks, Math.floor(Date.now() / RHYTHM.TIC) - this.data.time, this.beat?.flow() || ''].join('_'); // Fallback if BEAT isn't initialized
+		document.cookie = this.data.name + '=' + save + this.tail; // Build session string
 		if (save.length > RHYTHM.CAP) { // Maximum session capacity (default: 3500 bytes)
 			document.cookie = this.data.name + '=' + ('1' + save.slice(1)) + this.tail; // Mark as echo=1
 			this.session(true); // Rotate session if capacity exceeded
