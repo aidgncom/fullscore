@@ -339,11 +339,11 @@ class Rhythm {
 		if (RHYTHM.ADD.TAB && !RHYTHM.ADD.POW && this.hasBeat) { // BEAT Cross-tab tracking addon (default: true)
 			if (!tabs.endsWith('~' + number) && tabs !== number) {
 				document.cookie = 'score=' + parts[0] + '___' + (tabs ? tabs + '~' : '') + number + '; Path=/; SameSite=Lax' + (location.protocol === 'https:' ? '; Secure' : '');
-					const before = tabs.split('~').pop();
-					if (before && before !== number) {
-						const mark = this.get('rhythm_' + before); // Mark tab switch in previous session
-						if (mark) document.cookie = 'rhythm_' + before + '=' + mark + '___' + number + this.tail;
-					}
+				const before = tabs.split('~').pop();
+				if (before && before !== number) {
+					const mark = this.get('rhythm_' + before); // Mark tab switch in previous session
+					if (mark) document.cookie = 'rhythm_' + before + '=' + mark + '___' + number + this.tail;
+				}
 			}
 			const ses = this.get(window.name);
 			if (ses) {
