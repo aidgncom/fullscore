@@ -242,7 +242,7 @@ const rhythm_1 = {
 	device: 1,          // Instrument type (0=desktop, 1=mobile, 2=tablet)
 	referrer: 3,        // Performance spot (0=direct, 1=internal, 2=unknown, 3-255=specific domains)
 	scrolls: 23,        // Scroll gestures (passersby who stopped)
-	clicks: 45,         // Click actions (audience engagement)
+	clicks: 15,         // Click actions (audience engagement)
 	duration: 300,      // Performance duration
 	beat: "!home~10*button~" // Performance record (BEAT format)
 }
@@ -252,10 +252,10 @@ When stored in cookies, this data becomes a single line of sheet music separated
 
 ```
 // Private Mode (no direct identifiers)
-"0_1735680000_x7n4kb2p_1_3_23_45_300_!home~10*button~"
+"0_1735680000_x7n4kb2p_1_3_23_15_300_!home~10*button~"
 
 // Full Private Mode (no direct/indirect identifiers)
-"0___1_3_23_45_300_!home~10*button~"
+"0___1_3_23_15_300_!home~10*button~"
 ```
 
 A single line expresses an entire session. If JSON is conducting each orchestra section, RHYTHM is as concise as playing guitar tabs.
