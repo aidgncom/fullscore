@@ -336,17 +336,15 @@ class Rhythm {
 		const number = window.name.slice(7);
 		const parts = current.split('___');
 		const tabs = parts[1] || '';
-		if (RHYTHM.ADD.TAB && !RHYTHM.ADD.POW && !tabs.endsWith('~' + number) && tabs !== number) { // RHYTHM Cross-tab tracking
-			document.cookie = 'score=' + parts[0] + '___' + (tabs ? tabs + '~' : '') + number + '; Path=/; SameSite=Lax' + (location.protocol === 'https:' ? '; Secure' : '');
-			if (this.hasBeat) { // BEAT Cross-tab tracking addon (default: true)
-				const before = tabs.split('~').pop();
-				if (before && before !== number) {
-					const ses = this.get('rhythm_' + before); // Mark tab switch in previous session
-					if (ses) document.cookie = 'rhythm_' + before + '=' + ses + '___' + number + this.tail;
-				}
-			}
-		}
 		if (RHYTHM.ADD.TAB && !RHYTHM.ADD.POW && this.hasBeat) { // BEAT Cross-tab tracking addon (default: true)
+			if (!tabs.endsWith('~' + number) && tabs !== number) {
+				document.cookie = 'score=' + parts[0] + '___' + (tabs ? tabs + '~' : '') + number + '; Path=/; SameSite=Lax' + (location.protocol === 'https:' ? '; Secure' : '');
+					const before = tabs.split('~').pop();
+					if (before && before !== number) {
+						const mark = this.get('rhythm_' + before); // Mark tab switch in previous session
+						if (mark) document.cookie = 'rhythm_' + before + '=' + mark + '___' + number + this.tail;
+					}
+			}
 			const ses = this.get(window.name);
 			if (ses) {
 				const flow = ses.split('_').slice(8).join('_');
