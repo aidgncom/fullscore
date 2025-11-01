@@ -244,7 +244,7 @@ const rhythm_1 = {
 	scrolls: 23,        // Scroll gestures (passersby who stopped)
 	clicks: 45,         // Click actions (audience engagement)
 	duration: 300,      // Performance duration
-	beat: "!home~10*1~" // Performance record (BEAT format)
+	beat: "!home~10*button~" // Performance record (BEAT format)
 }
 ```
 
@@ -252,10 +252,10 @@ When stored in cookies, this data becomes a single line of sheet music separated
 
 ```
 // Private Mode (no direct identifiers)
-"0_1735680000_x7n4kb2p_1_3_23_45_300_!home~10*1~"
+"0_1735680000_x7n4kb2p_1_3_23_45_300_!home~10*button~"
 
 // Full Private Mode (no direct/indirect identifiers)
-"0___1_3_23_45_300_!home~10*1~"
+"0___1_3_23_45_300_!home~10*button~"
 ```
 
 A single line expresses an entire session. If JSON is conducting each orchestra section, RHYTHM is as concise as playing guitar tabs.
@@ -331,9 +331,9 @@ if (url.pathname === "/rhythm/echo" && request.method === "POST") {
 }
 ```
 
-Edge analyzes every performance in real-time. The (/rhythm) path monitors cookie resonance through HEAD requests, while (/rhythm/echo) archives completed performances. Bot patterns like MachineGun (rapid clicks), Metronome (exact intervals), or Surface (shallow DOM) trigger security flags. Human patterns activate behavior flags for personalization. If someone hesitates before purchasing, you could show them a coupon.
+Edge analyzes every performance in real-time. The (/rhythm/?livestreaming) path monitors cookie resonance through HEAD requests, while (/rhythm/echo) archives completed performances. Bot patterns like MachineGun (rapid clicks), Metronome (exact intervals), or Surface (shallow DOM) trigger security flags. Human patterns activate behavior flags for personalization. If someone hesitates before purchasing, you could show them a coupon.
 
-No API endpoints required. No separate analytics servers or central database queries needed. Browser and Edge connect closely in spacetime like sympathetic resonance, fast and vivid. Processing delays are imperceptibly low.
+No API endpoints required. No separate analytics servers or central database queries needed. No Origin access required. Edge listens directly, without calling home. Browser and Edge connect closely in spacetime like sympathetic resonance, fast and vivid. Processing delays are imperceptibly low.
 
 A traditional concert hall would be different. Without complex broadcast equipment, without separate studios, street music spreads worldwide.
 
