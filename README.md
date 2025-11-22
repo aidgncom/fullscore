@@ -2,7 +2,7 @@
 
 <br />
 <br />
-<img width="1920" height="1080" alt="Full Score - OpenGraph" src="https://github.com/user-attachments/assets/e876bdd5-3529-43b1-8268-8248cc402107" />
+<img width="1920" height="1080" alt="Full Score - OpenGraph" src="https://github.com/user-attachments/assets/e9fe69f9-3bd8-4073-84f9-b1b641ac0e12" />
 <br />
 <br />
 
@@ -56,7 +56,7 @@ Full Score consists of three independent technologies. Each is useful alone, yet
 
 **RHYTHM (Real-time Hybrid Traffic History Monitor)** is a client-side engine that leverages users' browsers as auxiliary databases. Unlike traditional approaches that send, store, and process data on servers, it embeds core functionality in the browser. When it resonates with Edge computing, it enables real-time analysis and immediate response without server intervention. It proposes a new paradigm with minimal data transfer, server operation, and processing costs.
 
-**BEAT (Behavioral Event Analytics Transform)** is a core structure for multi-dimensional event data, including the time when actions occur, the space where events occur, and the depth of each action, in linear sequences. These sequences express meaning without parsing (Semantic), preserve information in their original state (Raw), and maintain a fully organized structure (Format). Therefore, BEAT is the Semantic Raw Format (SRF) standard.
+**BEAT (Behavioral Event Analytics Transform)** is a core structure for multi-dimensional event data, including the space where events occur, the time when actions occur, and the depth of each action, in linear sequences. These sequences express meaning without parsing (Semantic), preserve information in their original state (Raw), and maintain a fully organized structure (Format). Therefore, BEAT is the Semantic Raw Format (SRF) standard.
 
 These three technologies are like a jazz trio where each solo performance is excellent, but together they create true harmony. Add Edge computing, and the quartet performs at its full potential.
 
@@ -366,28 +366,28 @@ Listen to the story this short performance tells. A user takes the homepage (!ho
 
 BEAT records performance order as follows. Symbol assignments are customizable using any RFC 6265 characters.
 
-The notation below describes the official Web domain implementation. The BEAT (SRF) standard itself is domain-agnostic and can be applied to Finance, Game, Healthcare, IoT, Logistics, and other event-driven environments. Domains may adjust symbol assignments as long as temporal order, spatial context, and action semantics are preserved. See Applications Across Domains in the Sixth Movement for examples.
-
-**Time (~) - Temporal flow**
-- ~10: 1 second of breath
-- ~250: 25 seconds of silence
-- ~10/20/30: RHYTHM repetition (repeat times separated by slashes)
-
-**Distance (^) - Movement scale**
+The notation below describes the official Web domain implementation. The BEAT (SRF) standard itself is domain-agnostic and can be applied to Finance, Game, Healthcare, IoT, Logistics, and other event-driven environments. Domains may adjust symbol assignments as long as spatial context, temporal order, and action semantics are preserved. See Applications Across Domains in the Sixth Movement for examples.
 
 **Space (!) - Contextual position**
 - !home: Overture (homepage, only reserved word)
 - !a1b, !a1b2c: Songs designated by 3-5 character auto-generated hashes
 - !en, !product: Other songs directly chosen by performer (user-mapped pages)
 
+**Time (~) - Temporal flow**
+- ~10: 1 second of breath
+- ~250: 25 seconds of silence
+- ~10/20/30: RHYTHM repetition (repeat times separated by slashes)
+
 **Action (*) - Interactive state change**
 - *3nav1: Plucking guitar's third string with first stroke (DOM depth + element type + index)
 - *6button2: Plucking guitar's sixth string with second stroke
 - *close, *modal: Special chords designated by composer (user-mapped elements)
 
-**Value (:) - Attached parameter**
-
 **Repeat (/) - Pattern repetition**
+
+**Distance (^) - Movement scale**
+
+**Value (:) - Attached parameter**
 
 **Hyphen (-) - Flexible bind marker**
 
@@ -484,7 +484,7 @@ Despite these variations, the default form remains the ideal one. Here's why:
 
 ### Interpreting the Performance
 
-BEAT transforms multi-dimensional event data of time, space, and action with depth into linear sequences. It compresses multidimensional logs into single strings that can be directly input into sequence models.
+BEAT transforms multi-dimensional event data of space, time, and action with depth into linear sequences. It compresses multidimensional logs into single strings that can be directly input into sequence models.
 
 ```
 rhythm_1 = !home~300*3input1~1200!product~50*buy
@@ -746,15 +746,14 @@ WAF doesn't ignore noisy sounds echoing from BEAT but executes summary judgment.
 
 Data formats such as JSON or CSV contain state, logs represent change, and language conveys meaning. BEAT combines these three layers into a single structure. It understands meaning without parsing (Semantic), preserves information in its original state (Raw), and maintains a fully organized structure (Format). Therefore, BEAT is the Semantic Raw Format (SRF) standard.
 
-Simply put, BEAT doesn’t format the content of data (Key + Value). It formats the relationships within data (Time + Space + Action). And this value does not stay within the web. In the AI era, BEAT begins a new category where the data format itself becomes grammar.
-
+Simply put, BEAT doesn’t format the content of data (Key + Value). It formats the relationships within data (Space + Time + Action). And this value does not stay within the web. In the AI era, BEAT begins a new category where the data format itself becomes grammar.
 
 
 ```
 
 Finance domain example (*action:price:quantity)
-trader_1=!open~182!orderbook-NVDA~941*buy-NVDA:188:40
-trader_2=!open~1*buy-NVDA:market:5000
+trader_1=!open~182*nvda!orderbook-NVDA~941*buy-NVDA:188:40
+trader_2=!open~1*nvda!orderbook-NVDA~1*buy-NVDA:market:5000
 // Adaptive execution and relay routing for HFT and MEV patterns
 
 
@@ -779,9 +778,13 @@ sensor_2=!start~100/100/100*temp:23.5~86*temp:24.1~37*temp:26.4*alert:overheat!e
 Logistics domain example (*action:reason)
 flight_1=!JFK~2112*load~912*depart~486*climb~8640*cruise!MEM~2514*unload~1896*sort~3798*depart~522*climb~32472*cruise!CDG~3138*unload...
 flight_2=!JFK~2046*load~864*depart~462*climb~8424*cruise!MEM~872*ramp-hold:ground-capacity~6514*unload...
-// Ramp-hold caused by limited ground handling capacity
+// Abnormal flight operations recorded for real-time control and black box logging
 
 ```
+
+Let me explain a simpler example of applying BEAT to the aviation domain.
+
+BEAT can stream the entire daily schedule of a single aircraft at around 1KB. And there are around 30,000 commercial flights per day worldwide. If you archive this for one year, all of it can fit inside a 10GB USB drive. Inside that USB, every scenario from the very first takeoff to the final landing of all aircraft is preserved in a form that requires no parsing.
 
 ### Silent Security, Value of Nothingness
 
@@ -845,7 +848,7 @@ Now every browser serves like an auxiliary database containing its own music. Wi
 
 <br />
 <br />
-<img width="1080" height="1920" alt="Photo by Andriy Vitaly on Unsplash" src="https://github.com/user-attachments/assets/9f7e87d7-2790-48d8-854c-bdd54a9b61c9" />
+<img width="1080" height="1920" alt="Photo by Andriy Vitaly on Unsplash" src="https://github.com/user-attachments/assets/3cd87f26-dc82-4fd3-ac60-b44489bda3a8" />
 <br />
 <br />
 
@@ -939,12 +942,12 @@ The script runs smoothly even when placed in your site’s footer. If you want t
 // For detailed instructions, see the Quick Start section in the README
 BEAT.TIC = 100;						// Tick (default: 100ms)
 BEAT.TOK = {						// Token mapping
-	T: '~',							// Time
-	D: '^',							// Distance
 	S: '!',							// Space
+	T: '~',							// Time
 	A: '*',							// Action
-	V: ':',							// Value
 	R: '/',							// Repeat
+	D: '^',							// Distance
+	V: ':',							// Value
 	H: '-',							// Hyphen
 };
 BEAT.MAP.S = {						// Space map
@@ -1059,23 +1062,23 @@ Edge transforms Full Score into a real-time analytics layer with no API endpoint
 
 <br />
 
-<img width="1200" height="630" alt="Full Score - Edge example 01" src="https://github.com/user-attachments/assets/de955cd0-5cf0-4efd-85b4-18ca88cc90b4" />
+<img width="1200" height="630" alt="Full Score - Edge example 01" src="https://github.com/user-attachments/assets/8b533c7d-d66a-4351-9d41-4e826f1b1bde" />
 
 <br />
 
-<img width="1200" height="630" alt="Full Score - Github example 01" src="https://github.com/user-attachments/assets/12de3212-ce5d-4422-8ae2-49218d17a053" />
+<img width="1200" height="630" alt="Full Score - Github example 01" src="https://github.com/user-attachments/assets/d15c4359-9edf-4db3-8e51-c23d67177b4c" />
 
 <br />
 
-<img width="1200" height="630" alt="Full Score - Github example 02" src="https://github.com/user-attachments/assets/7cd8b322-0977-431d-8c00-d1fec7c14197" />
+<img width="1200" height="630" alt="Full Score - Github example 02" src="https://github.com/user-attachments/assets/73e85066-9e1c-481d-bebe-971e9adc472b" />
 
 <br />
 
-<img width="1200" height="630" alt="Full Score - AI assistant example 01" src="https://github.com/user-attachments/assets/6b61cfe5-d1ed-41f3-bb0e-4f12bea5191c" />
+<img width="1200" height="630" alt="Full Score - AI assistant example 01" src="https://github.com/user-attachments/assets/111316b4-21e5-43eb-833f-3b436dddda61" />
 
 <br />
 
-<img width="1200" height="630" alt="Full Score - AI assistant example 02" src="https://github.com/user-attachments/assets/e0a7d152-39c4-4379-9a78-f8152e2c2aca" />
+<img width="1200" height="630" alt="Full Score - AI assistant example 02" src="https://github.com/user-attachments/assets/9aae2704-0ee6-4e33-8499-efe780ecc0dc" />
 
 <br />
 
@@ -1094,7 +1097,7 @@ Resonator is the official reference implementation for interpreting BEAT and is 
 
 BEAT is defined as an expressive system, not a generic logging idea. Consistent interpretation of BEAT across different environments is also important to maintain semantic compatibility. Therefore, alternative implementations that claim equivalence are expected to use the Compatibility criteria provided below to verify interpretation consistency.
 
-**Compatibility**: BEAT is considered compatible even if the symbols (! # $ % & ' ( ) * + - . / 0-9 : < = > ? @ A-Z [ ] ^ _ ` a-z { | } ~) [RFC 6265](https://www.rfc-editor.org/rfc/rfc6265) or the parser implementation differs, as long as event data is serialized into a sequential format preserving temporal order, spatial context, and action semantics, producing an essentially identical semantic stream regardless of storage medium or platform. Semantic compatibility is determined by the meaning of event sequences and their structural interpretation, irrespective of token choice or storage representation. Any such compatible implementation constitutes a derivative work under copyright law and must comply with AGPL-3.0-or-later terms.
+**Compatibility**: BEAT is considered compatible even if the symbols (! # $ % & ' ( ) * + - . / 0-9 : < = > ? @ A-Z [ ] ^ _ ` a-z { | } ~) [RFC 6265](https://www.rfc-editor.org/rfc/rfc6265) or the parser implementation differs, as long as event data is serialized into a sequential format preserving spatial context, temporal order, and action semantics, producing an essentially identical semantic stream regardless of storage medium or platform. Semantic compatibility is determined by the meaning of event sequences and their structural interpretation, irrespective of token choice or storage representation. Any such compatible implementation constitutes a derivative work under copyright law and must comply with AGPL-3.0-or-later terms.
 
 See individual source files for detailed license information.
 
